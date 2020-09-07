@@ -1,0 +1,22 @@
+.winbet {
+  display: flex;
+  background-color: cornsilk;
+  margin-bottom: 1em;
+  max-width: 800px;
+}
+.radiodiv {
+  display: flex;
+  flex-direction: column;
+}
+#winnermatches {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+input {
+  width: 6em;
+  margin: 1em 0;
+}
+body {
+  text-align: center;
+}
