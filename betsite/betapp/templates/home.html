@@ -52,7 +52,7 @@
       function updateWinnerBet(match) {
         let winner = parseInt($("#1radio-"+match+" input[type='radio']:checked").val()) - 1;
         let points = parseInt($('#points-'+match).val());
-        $('#payout-'+match).text((odds[match][winner]*points).toFixed(2));
+        $('#payout-'+match).text(Math.floor(odds[match][winner]*points));
       }
       function createWinnerMatches(matches) {
         let wmatches = []
