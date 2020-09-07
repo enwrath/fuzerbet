@@ -34,9 +34,10 @@
       }
 
       function handleData(data) {
-          $("#points").text(data.points)
+          $("#points").text(data.points);
           createWinnerMatches(data.winnermatches);
           createWinnerMatchBets(data.winnerbets);
+          $(".wagerinput").attr({"max": data.points});
       }
 
       function winnerBet(match) {
@@ -72,7 +73,7 @@
 
           let radiodiv = $('<div id="1radio-'+match.id+'" class="radiodiv"></div>');
 
-          let pointInput = $('<div class="radiodiv"><label>Wager</label><input type="number" id="points-'+match.id+'" value="1" min="1"></div>');
+          let pointInput = $('<div class="radiodiv"><label>Wager</label><input type="number" class="wagerinput" id="points-'+match.id+'" value="1" min="1"></div>');
           let payout = $('<span>You can win: </span><span id="payout-'+match.id+'"></span>');
           radiodiv.append(radio1);
           radiodiv.append(radio2);
