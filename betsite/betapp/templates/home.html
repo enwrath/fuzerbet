@@ -15,14 +15,15 @@
     {% load socialaccount %}
 
     {% if user.is_authenticated %}
-    LOGGED IN as {{ user }}
-    <br />
-    YOU HAVE <span id="points"></span> points
-    <br />
-    BETTING OPEN FOR:<br /><br />
+    <p>
+      LOGGED IN as {{ user }} <br />
+      YOU HAVE <span id="points"></span> points
+    </p>
+
+    <h3>BETTING OPEN FOR:</h3>
     <div id="winnermatches">
     </div>
-    BET HISTORY
+    <h3>BET HISTORY</h3>
     <div id="winnerbets">
     </div>
     <script>
