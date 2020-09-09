@@ -11,23 +11,24 @@
     <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.5.1/jquery.min.js" integrity="sha512-bLT0Qm9VnAYZDflyKcBaQ2gg0hSYNQrJ8RilYldYQ1FxQYoCLtUjuuRuZo+fjqhx/qtq/1itJ0C2ejDxltZVFg==" crossorigin="anonymous"></script>
 </head>
 <body onload="updateData()">
-    <h1>Welcome to fuzerbet.</h1>
+    <h1>Fuzerbet</h1>
     {% load socialaccount %}
 
     {% if user.is_authenticated %}
     <p>
-      LOGGED IN as {{ user }} <br />
-      YOU HAVE <span id="points"></span> points
+      Nimi: {{ user }} <br />
+      Sinulla on <span id="points"></span> leikkipenniä.
     </p>
 
-    <h3>BETTING OPEN FOR:</h3>
+    <h3>Avoimet kohteet:</h3>
     <div id="winnermatches">
     </div>
-    <h3>BET HISTORY</h3>
+    <h3>Veikkaushistoria</h3>
     <div id="winnerbets">
     </div>
     <script>
     let odds = {};
+
       function updateData() {
         $.ajax({url: "userUpdate", success: function(result){
           handleData(result);
@@ -52,6 +53,11 @@
       function updateWinnerBet(match) {
         let winner = parseInt($("#1radio-"+match+" input[type='radio']:checked").val()) - 1;
         let points = parseInt($('#points-'+match).val());
+        let max = parseInt($('#points-'+match).attr('max'));
+        if (points > max) {
+          points = max;
+          $('#points-'+match).val(max);
+        }
         $('#payout-'+match).text(Math.floor(odds[match][winner]*points));
       }
       function createWinnerMatches(matches) {
@@ -63,25 +69,25 @@
             continue
           }
           odds[match.id] = [parseFloat(match.player1odds), parseFloat(match.player2odds)];
-          let radiop = $('<p>Select winner</p>')
-          let radio1 = $('<label>'+match.player1+'('+match.player1odds+')</label><input type="radio" checked="checked" name="radio-'+match.id+'" value="'+1+'">');
-          let radio2 = $('<label>'+match.player2+'('+match.player2odds+')</label><input type="radio" name="radio-'+match.id+'" value="'+2+'">');
-          var btn = $('<button/>', {
-            text: 'BET',
-            onclick: 'winnerBet('+match.id+')'
-          });
-          let betdiv = $('<div onchange="updateWinnerBet('+match.id+')" class="winbet" id="winbetdiv-'+match.id+'"></div>');
+          let betdiv = $(`<div class="betdiv" onchange="updateWinnerBet(${match.id})" id="winbetdiv-${match.id}">
+            <h4>SEMIFINAALI</h4>
+            <div class="fbox" id="1radio-${match.id}">
+              <label class="rbox">
+              <input type="radio" name="radio-${match.id}" value="1" checked>
+              <span>${match.player1} (${match.player1odds})</span></label>
+              <label class="rbox">
+              <input type="radio" name="radio-${match.id}" value="2">
+              <span>${match.player2} (${match.player2odds})</span></label>
+            </div>
+            <div class="xbox">
+              <label><span>Veto: </span><input type="number" class="wagerinput" id="points-${match.id}" value="1" min="1" /><span> leikkipenniä</span></label>
 
-          let radiodiv = $('<div id="1radio-'+match.id+'" class="radiodiv"></div>');
-
-          let pointInput = $('<div class="radiodiv"><label>Wager</label><input type="number" class="wagerinput" id="points-'+match.id+'" value="1" min="1"></div>');
-          let payout = $('<span>You can win: </span><span id="payout-'+match.id+'"></span>');
-          radiodiv.append(radio1);
-          radiodiv.append(radio2);
-          betdiv.append(radiodiv);
-          betdiv.append(pointInput);
-          betdiv.append(payout)
-          betdiv.append(btn);
+            </div>
+            <div class="xbox">
+              <span>Voitto: <span id="payout-${match.id}"></span> leikkipenniä</span>
+              <button onclick="winnerBet(${match.id})">Aseta veto</button>
+            </div>
+          </div>`);
           $("#winnermatches").append(betdiv);
           updateWinnerBet(match.id);
         }
