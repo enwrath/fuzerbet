@@ -1,1 +1,1 @@
-web: gunicorn betsite.wsgi
+web: gunicorn betapp/betsite.wsgi
