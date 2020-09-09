@@ -1,1 +1,1 @@
-web: gunicorn betsite.betsite.wsgi
+web: gunicorn --pythonpath betsite betsite.wsgi
