@@ -11,6 +11,7 @@ class Points(models.Model):
         verbose_name_plural = "Points"
 
 class WinnerMatch(models.Model):
+    title = models.CharField(max_length=200)
     player1 = models.CharField(max_length=200)
     player2 = models.CharField(max_length=200)
     player1odds = models.DecimalField(default=2,max_digits=5, decimal_places=2)

@@ -70,7 +70,7 @@
           }
           odds[match.id] = [parseFloat(match.player1odds), parseFloat(match.player2odds)];
           let betdiv = $(`<div class="betdiv" onchange="updateWinnerBet(${match.id})" id="winbetdiv-${match.id}">
-            <h4>SEMIFINAALI</h4>
+            <h4>${match.title}</h4>
             <div class="fbox" id="1radio-${match.id}">
               <label class="rbox">
               <input type="radio" name="radio-${match.id}" value="1" checked>
@@ -100,7 +100,7 @@
         $("#winnerbets").empty();
         for (const b in bets) {
           const bet = bets[b];
-          const text = $(`<div class="winbethistory"><p>${bet.player1} VS ${bet.player2} | Bet on ${bet.guess} | Payout ${bet.points} | Resolved ${bet.resolved} | Win ${bet.winner === bet.guess}</p></div>`);
+          const text = $(`<div class="winbethistory"><p>${bet.player1} VS ${bet.player2} | Veikkasit ${bet.guess===1?bet.player1:bet.player2} | Leikkipennejä tulossa ${bet.points} | Ratkennut ${bet.resolved} | Voitit ${bet.winner === bet.guess}</p></div>`);
           $("#winnerbets").append(text);
         }
       }
