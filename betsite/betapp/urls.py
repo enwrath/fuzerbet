@@ -8,4 +8,6 @@ urlpatterns = [
     url(r'^accounts/', include('allauth.urls')),
     path('winnerBet', views.winnerBet, name='winnerBet'),
     path('userUpdate', views.userUpdate, name='userUpdate'),
+    path('stream', views.streamView, name='streamView'),
+    path('streamUpdate', views.streamUpdate, name='streamUpdate'),
 ]

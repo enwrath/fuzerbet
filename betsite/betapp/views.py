@@ -31,6 +31,30 @@ def userUpdate(request):
     data['winnerbets'] = wbets
     return JsonResponse(data)
 
+
+def streamView(request):
+    print("lo")
+    return render(request, "stream.html")
+
+def streamUpdate(request):
+    data = {}
+    match = WinnerMatch.objects.latest('id')
+    data['player1'] = match.player1
+    data['player2'] = match.player2
+    data['player1odds'] = match.player1odds
+    data['player2odds'] = match.player2odds
+    bets = WinnerBet.objects.filter(match=match)
+    p1 = 0
+    p2 = 0
+    for bet in bets:
+        if bet.winner == 1:
+            p1 += bet.points
+        else:
+            p2 += bet.points
+    data['player1points'] = p1
+    data['player2points'] = p2
+    return JsonResponse(data)
+
 @login_required
 def winnerBet(request):
     points = int(request.GET.get('points', '0'))

@@ -1,0 +1,35 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Fuzer bet</title>
+    {% load static %}
+    <link rel="stylesheet" type="text/css" href="{% static 'stream.css' %}">
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.5.1/jquery.min.js" integrity="sha512-bLT0Qm9VnAYZDflyKcBaQ2gg0hSYNQrJ8RilYldYQ1FxQYoCLtUjuuRuZo+fjqhx/qtq/1itJ0C2ejDxltZVFg==" crossorigin="anonymous"></script>
+</head>
+<body onload="updateData()">
+    <p id="p1data">
+    </div>
+    <p id="p2data">
+    </div>
+    <script>
+      var intervalID = window.setInterval(updateData, 2000);
+
+      function updateData() {
+        $.ajax({url: "streamUpdate", success: function(result){
+          handleData(result);
+        }});
+      }
+
+      function handleData(data) {
+        console.log(data)
+        $("#p1data").text(`${data.player1} (${data.player2odds}) - ${data.player1points} pistettä veikattu.`);
+        $("#p2data").text(`${data.player2} (${data.player2odds}) - ${data.player2points} pistettä veikattu.`);
+
+      }
+
+    </script>
+</body>
+</html>
