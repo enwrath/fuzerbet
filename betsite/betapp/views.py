@@ -60,7 +60,7 @@ def streamUpdate(request):
 
 def rankingUpdate(request):
     rankings = []
-    p = Points.objects.order_by('-points')[:5]
+    p = Points.objects.order_by('-points')
     for po in p:
         rankings.append({'name': po.user.username, 'points': po.points})
     return JsonResponse({'rankings': rankings})
