@@ -2,11 +2,10 @@ from django.db import models
 from django.contrib.auth.models import User
 
 class Points(models.Model):
-    user = models.OneToOneField(
-        User,
-        on_delete=models.CASCADE,
-    ),
+    user = models.ForeignKey(User, on_delete=models.CASCADE)
     points = models.IntegerField(default=100)
+    def __str__(self):
+        return 'Points {}'.format(self.user.username)
     class Meta:
         verbose_name_plural = "Points"
 
@@ -30,8 +29,8 @@ class WinnerMatch(models.Model):
                 for bet in WinnerBet.objects.filter(match=self.pk).filter(resolved=False):
                     bet.resolved = True
                     if bet.winner == self.winner:
-                        p = Points.objects.get(id=bet.user.id)
-                        p.points += bet.points
+                        p = Points.objects.get(user=bet.user)
+                        p.points += bet.payout
                         p.save()
                     bet.save()
                 self.canBet = False
@@ -48,3 +47,5 @@ class WinnerBet(models.Model):
     payout = models.IntegerField(default=0)
     winner = models.IntegerField(default=0)
     resolved = models.BooleanField(default=False)
+    def __str__(self):
+        return '{} bet on {}: {} vs {}'.format(self.user.username, self.match.title, self.match.player1, self.match.player2)

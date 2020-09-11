@@ -7,10 +7,13 @@ from django.core.exceptions import ObjectDoesNotExist
 def index(request):
     return render(request, "home.html")
 
+def ranking(request):
+    return render(request, "ranking.html")
+
 @login_required
 def userUpdate(request):
     data = {}
-    data['points'] = Points.objects.get_or_create(id=request.user.id)[0].points
+    data['points'] = Points.objects.get_or_create(user=request.user)[0].points
     data['winnermatches'] = list(WinnerMatch.objects.filter(canBet=True).values())
     winnerbets = WinnerBet.objects.filter(user=request.user)
     wbets = []
@@ -34,7 +37,6 @@ def userUpdate(request):
 
 
 def streamView(request):
-    print("lo")
     return render(request, "stream.html")
 
 def streamUpdate(request):
@@ -56,6 +58,13 @@ def streamUpdate(request):
     data['player2points'] = p2
     return JsonResponse(data)
 
+def rankingUpdate(request):
+    rankings = []
+    p = Points.objects.order_by('-points')[:5]
+    for po in p:
+        rankings.append({'name': po.user.username, 'points': po.points})
+    return JsonResponse({'rankings': rankings})
+
 @login_required
 def winnerBet(request):
     points = int(request.GET.get('points', '0'))
@@ -63,7 +72,8 @@ def winnerBet(request):
     winner = int(request.GET.get('winner', '0'))
     if match == -1 or points == 0 or winner == 0:
         return HttpResponse("Missing parameters")
-    if points > Points.objects.get_or_create(id=request.user.id)[0].points:
+    p = Points.objects.get_or_create(user=request.user)[0]
+    if points > p.points:
         return HttpResponse("Not enough points")
     try:
         match = WinnerMatch.objects.get(pk=match)
@@ -75,7 +85,6 @@ def winnerBet(request):
     if winner == 2: pointsWin = int(points * match.player2odds)
     bet = WinnerBet(match=match, user=request.user, points=points, payout=pointsWin, winner=winner)
     bet.save()
-    p = Points.objects.get(id=request.user.id)
     p.points -= points
     p.save()
     return HttpResponse("Success")

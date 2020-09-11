@@ -10,4 +10,6 @@ urlpatterns = [
     path('userUpdate', views.userUpdate, name='userUpdate'),
     path('stream', views.streamView, name='streamView'),
     path('streamUpdate', views.streamUpdate, name='streamUpdate'),
+    path('ranking', views.ranking, name='ranking'),
+    path('rankingUpdate', views.rankingUpdate, name='rankingUpdate'),
 ]
