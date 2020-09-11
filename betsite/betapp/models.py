@@ -45,5 +45,6 @@ class WinnerBet(models.Model):
     user = models.ForeignKey(User, on_delete=models.CASCADE)
     match = models.ForeignKey(WinnerMatch, on_delete=models.CASCADE)
     points = models.IntegerField(default=0)
+    payout = models.IntegerField(default=0)
     winner = models.IntegerField(default=0)
     resolved = models.BooleanField(default=False)

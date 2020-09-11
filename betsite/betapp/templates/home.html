@@ -100,7 +100,7 @@
         $("#winnerbets").empty();
         for (const b in bets) {
           const bet = bets[b];
-          const text = $(`<div class="winbethistory"><p>${bet.player1} VS ${bet.player2} | Veikkasit ${bet.guess===1?bet.player1:bet.player2} | Leikkipennejä tulossa ${bet.points} | Ratkennut ${bet.resolved} | Voitit ${bet.winner === bet.guess}</p></div>`);
+          const text = $(`<div class="winbethistory"><p>${bet.player1} VS ${bet.player2} | Veikkasit ${bet.guess===1?bet.player1:bet.player2} ${bet.points} pennillä | Leikkipennejä tulossa ${bet.payout} | Ratkennut ${bet.resolved} | Voitit ${bet.winner === bet.guess}</p></div>`);
           $("#winnerbets").append(text);
         }
       }

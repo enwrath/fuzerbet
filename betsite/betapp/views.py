@@ -27,6 +27,7 @@ def userUpdate(request):
         b['guess'] = bet.winner
         b['winner'] = match.winner
         b['resolved'] = bet.resolved
+        b['payout'] = bet.payout
         wbets.append(b)
     data['winnerbets'] = wbets
     return JsonResponse(data)
@@ -72,7 +73,7 @@ def winnerBet(request):
         return HttpResponse("Closed")
     pointsWin = int(points * match.player1odds)
     if winner == 2: pointsWin = int(points * match.player2odds)
-    bet = WinnerBet(match=match, user=request.user, points=pointsWin, winner=winner)
+    bet = WinnerBet(match=match, user=request.user, points=points, payout=pointsWin, winner=winner)
     bet.save()
     p = Points.objects.get(id=request.user.id)
     p.points -= points
