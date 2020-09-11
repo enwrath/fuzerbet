@@ -70,7 +70,7 @@ def winnerBet(request):
     points = int(request.GET.get('points', '0'))
     match = int(request.GET.get('match', '-1'))
     winner = int(request.GET.get('winner', '0'))
-    if match == -1 or points == 0 or winner == 0:
+    if match == -1 or points <= 0 or winner == 0:
         return HttpResponse("Missing parameters")
     p = Points.objects.get_or_create(user=request.user)[0]
     if points > p.points:
