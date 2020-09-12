@@ -19,7 +19,13 @@ class WinnerMatch(models.Model):
     canBet = models.BooleanField(default=True)
     winner = models.IntegerField(default=0)
     def __str__(self):
-        return '{} vs {}'.format(self.player1, self.player2)
+        betopen = 'Closed'
+        winnerset = 'No winner set '
+        if self.canBet:
+            betopen = 'Open'
+        if self.winner != 0:
+            winnerset = 'Winner set '
+        return '{} & {}: {}: {} vs {}'.format(betopen, winnerset, self.title, self.player1, self.player2)
     class Meta:
         verbose_name_plural = "Winner Matches"
     def save(self,*args,**kwargs):
@@ -34,6 +40,13 @@ class WinnerMatch(models.Model):
                         p.save()
                     bet.save()
                 self.canBet = False
+        else:
+            #When new match is added, users get bumped to 100 points if they have less
+            lowpoints =  Points.objects.filter(points__lt=100)
+            for p in lowpoints:
+                p.points = 100
+                p.save()
+
         #prooooobably want to check that winchance is 1-99.
         #But surely admins know what they are doing!
         self.player1odds = round(1/(self.player1winchance/100), 2)
