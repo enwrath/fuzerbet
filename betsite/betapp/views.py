@@ -39,6 +39,9 @@ def userUpdate(request):
 def streamView(request):
     return render(request, "stream.html")
 
+def streamView2(request):
+    return render(request, "stream2.html")
+
 def streamUpdate(request):
     data = {}
     match = WinnerMatch.objects.latest('id')

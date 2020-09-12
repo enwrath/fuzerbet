@@ -1,0 +1,70 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Fuzer bet</title>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.5.1/jquery.min.js" integrity="sha512-bLT0Qm9VnAYZDflyKcBaQ2gg0hSYNQrJ8RilYldYQ1FxQYoCLtUjuuRuZo+fjqhx/qtq/1itJ0C2ejDxltZVFg==" crossorigin="anonymous"></script>
+
+    <style>
+			.wrapper {
+				width: 500px;
+			}
+
+			.progress-bar {
+				width: 100%;
+				background-color: red;
+			}
+
+			.progress-bar-fill {
+				display: block;
+				height: 22px;
+				background-color: #659cef;
+				border-radius: 3px;
+
+				transition: width 500ms ease-in-out;
+			}
+      .row {
+        display: flex;
+        justify-content: space-evenly;
+        font-size: large;
+        font-weight: bold;
+        text-shadow: 0 0 3px black, 0 0 3px black, 0 0 3px black, 0 0 3px black;
+        color: white;
+      }
+		</style>
+
+</head>
+<body onload="updateData()">
+  <div class="wrapper">
+    <div class="row">
+      <span id="player1"></span>
+      <span id="player2"></span>
+    </div>
+		<div class="progress-bar">
+			<span class="progress-bar-fill" style="width: 50%;"></span>
+		</div>
+	</div>
+  <script>
+    var intervalID = window.setInterval(updateData, 2000);
+
+    function updateData() {
+      $.ajax({url: "streamUpdate", success: function(result){
+        handleData(result);
+      }});
+    }
+
+    function handleData(data) {
+      let ratio = 50;
+      if (data.player1points != 0 || data.player2points != 0) {
+        ratio = data.player1points / (data.player1points+data.player2points) *100;
+      }
+      $('.progress-bar-fill').css('width', `${ratio}%`);
+      $("#player1").text(data.player1)
+      $("#player2").text(data.player2)
+    }
+
+  </script>
+</body>
+</html>

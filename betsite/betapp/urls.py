@@ -9,6 +9,7 @@ urlpatterns = [
     path('winnerBet', views.winnerBet, name='winnerBet'),
     path('userUpdate', views.userUpdate, name='userUpdate'),
     path('stream', views.streamView, name='streamView'),
+    path('stream2', views.streamView2, name='streamView2'),
     path('streamUpdate', views.streamUpdate, name='streamUpdate'),
     path('ranking', views.ranking, name='ranking'),
     path('rankingUpdate', views.rankingUpdate, name='rankingUpdate'),
