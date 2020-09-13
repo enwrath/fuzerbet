@@ -66,3 +66,36 @@ a.button {
   color: #fff;
   font-weight: bold;
 }
+
+#bethistorydiv {
+  background-color: #3e3e3e;
+  width: fit-content;
+  margin: auto;
+}
+.accordion {
+  background-color: #a9b2c5;
+  color: #444;
+  cursor: pointer;
+  padding: 18px;
+  width: 100%;
+  text-align: left;
+  border: none;
+  outline: none;
+}
+.selectedAccordion, .accordion:hover {
+  background-color: #ccc;
+}
+.accordioncontent {
+  height: 1px;
+  overflow: hidden;
+}
+.accordion:after {
+  content: '\02795'; /* Unicode character for "plus" sign (+) */
+  color: #777;
+  float: right;
+  margin-left: 5px;
+}
+
+.selectedAccordion:after {
+  content: "\2796"; /* Unicode character for "minus" sign (-) */
+}

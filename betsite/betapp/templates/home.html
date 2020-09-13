@@ -23,8 +23,10 @@
     <h3>Avoimet kohteet:</h3>
     <div id="winnermatches">
     </div>
-    <h3>Veikkaushistoria</h3>
-    <div id="winnerbets">
+    <div id='bethistorydiv'>
+      <button id="bethistoryaccordion" class="accordion" onclick="toggleAccordion()">Veikkaushistoria</button>
+      <div id="winnerbets" class="accordioncontent">
+      </div>
     </div>
     <script>
       let odds = {};
@@ -100,11 +102,24 @@
       }
 
       function createWinnerMatchBets(bets) {
-        $("#winnerbets").empty();
+        $('#winnerbets').empty();
         for (const b in bets) {
           const bet = bets[b];
           const text = $(`<div class="winbethistory"><p>${bet.player1} VS ${bet.player2} | Veikkasit ${bet.guess===1?bet.player1:bet.player2} ${bet.points} pennillä | Leikkipennejä tulossa ${bet.payout} | Ratkennut ${bet.resolved} | Voitit ${bet.winner === bet.guess}</p></div>`);
           $("#winnerbets").append(text);
+        }
+      }
+
+      function toggleAccordion() {
+        $('#bethistoryaccordion').toggleClass('selectedAccordion');
+        $('html,body').animate({
+          scrollTop: $("#bethistoryaccordion").offset().top
+        });
+        let disp = $('#winnerbets').css('height');
+        if (disp === "1px") {
+          $('#winnerbets').css('height', 'auto');
+        } else {
+          $('#winnerbets').css('height', '1px');
         }
       }
     </script>
