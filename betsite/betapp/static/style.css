@@ -99,3 +99,22 @@ a.button {
 .selectedAccordion:after {
   content: "\2796"; /* Unicode character for "minus" sign (-) */
 }
+
+.betgreen {
+  background-color: #7ca27c;
+}
+.betred {
+  background-color: #ca8989;
+}
+.betgray {
+  background-color: #a29f9f;
+}
+.winbethistory {
+  color: black;
+  padding: 1em;
+  text-align: left;
+}
+.bettedplayer {
+  font-weight: bold;
+  text-decoration: underline;
+}

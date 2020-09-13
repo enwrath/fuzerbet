@@ -105,8 +105,23 @@
         $('#winnerbets').empty();
         for (const b in bets) {
           const bet = bets[b];
-          const text = $(`<div class="winbethistory"><p>${bet.player1} VS ${bet.player2} | Veikkasit ${bet.guess===1?bet.player1:bet.player2} ${bet.points} pennillä | Leikkipennejä tulossa ${bet.payout} | Ratkennut ${bet.resolved} | Voitit ${bet.winner === bet.guess}</p></div>`);
-          $("#winnerbets").append(text);
+          let tila = 'Odottaa tulosta';
+          let color = 'betgray';
+          if (bet.resolved) {
+            color = bet.winner === bet.guess ? 'betgreen' : 'betred';
+            tila = bet.winner === bet.guess ? 'Voitto' : 'Tappio';
+          }
+          const p1 = bet.guess === 1 ? `<span class="bettedplayer">${bet.player1}</span>` : bet.player1;
+          const p2 = bet.guess === 2 ? `<span class="bettedplayer">${bet.player2}</span>` : bet.player2;
+          const betdiv = $(`<div class="winbethistory ${color}"><div>
+          <span>Tila: ${tila}</span></div>
+          <div>
+          <p>${bet.title}: ${p1} VS ${p2}<br />
+          Voitto: <span class="bettedplayer">${bet.payout}</span></p>
+          </div>
+          </div>`);
+
+          $("#winnerbets").append(betdiv);
         }
       }
 

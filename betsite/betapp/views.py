@@ -31,6 +31,7 @@ def userUpdate(request):
         b['winner'] = match.winner
         b['resolved'] = bet.resolved
         b['payout'] = bet.payout
+        b['title'] = match.title
         wbets.append(b)
     data['winnerbets'] = wbets
     return JsonResponse(data)
