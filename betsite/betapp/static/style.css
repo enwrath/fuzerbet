@@ -113,6 +113,8 @@ a.button {
   color: black;
   padding: 1em;
   text-align: left;
+  border-style: solid;
+  border-width: thin;
 }
 .bettedplayer {
   font-weight: bold;
