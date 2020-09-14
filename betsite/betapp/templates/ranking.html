@@ -5,26 +5,49 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta http-equiv="X-UA-Compatible" content="ie=edge">
     <title>Fuzer bet</title>
-    {% load static %}
-    <link rel="stylesheet" type="text/css" href="{% static 'stream.css' %}">
+    <style>
+      tr:nth-child(even) {
+        background-color: #f2f2f2;
+      }
+      table {
+        border-collapse: collapse;
+        min-width: 40%;
+      }
+      th {
+        text-align: left;
+      }
+      body {
+        font-size: large;
+      }
+		</style>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.5.1/jquery.min.js" integrity="sha512-bLT0Qm9VnAYZDflyKcBaQ2gg0hSYNQrJ8RilYldYQ1FxQYoCLtUjuuRuZo+fjqhx/qtq/1itJ0C2ejDxltZVFg==" crossorigin="anonymous"></script>
 </head>
 <body onload="updateData()">
-    <script>
+  <table>
+    <tr>
+      <th>#</th>
+      <th>Nimi</th>
+      <th>Pisteet</th>
+    </tr>
+  </table>
 
-      function updateData() {
-        $.ajax({url: "rankingUpdate", success: function(result){
-          handleData(result);
-        }});
-      }
+  <script>
 
-      function handleData(data) {
-        for (value in data.rankings) {
-          console.log(data.rankings[value])
-          const text = $(`<p>${parseInt(value)+1}: ${data.rankings[value].name} - ${data.rankings[value].points} leikkipenniä</p>`);
-          $("body").append(text);
-        }
+    function updateData() {
+      $.ajax({url: "rankingUpdate", success: function(result){
+        handleData(result);
+      }});
+    }
+
+    function handleData(data) {
+      $('tr').slice(1).remove();
+      for (value in data.rankings) {
+        const row = $(`<tr>
+          <td>${parseInt(value)+1}</td><td>${data.rankings[value].name}</td><td>${data.rankings[value].points}</td>
+          </tr>`);
+        $("table").append(row);
       }
-    </script>
+    }
+  </script>
 </body>
 </html>
