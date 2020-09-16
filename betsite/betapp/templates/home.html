@@ -95,7 +95,8 @@
           }
           odds[match.id] = [parseFloat(match.player1odds), parseFloat(match.player2odds)];
           let betdiv = $(`<div class="betdiv" onchange="updateWinnerBet(${match.id})" id="winbetdiv-${match.id}">
-            <h4>${match.title}</h4>
+            <h3>${match.title}</h4>
+            <h3>${match.player1} - ${match.player2}</h5>
             <div class="fbox" id="1radio-${match.id}">
               <label class="rbox">
               <input type="radio" name="radio-${match.id}" value="1" checked>
@@ -162,7 +163,8 @@
             <span>3-4 (${match.resL3})</span></label>`
           }
           let betdiv2 = $(`<div class="betdiv" onchange="updateWinnerBet2(${match.id})" id="winbetdiv2-${match.id}">
-            <h4>${match.title}</h4>
+            <h3>${match.title}</h4>
+            <h3>${match.player1} - ${match.player2}</h5>
             <div class="fbox" id="2radio-${match.id}">
               ${wdiv}
             </div>
