@@ -26,16 +26,17 @@ body {
 .fbox {
   display: flex;
   justify-content: space-evenly;
+  flex-wrap: wrap;
 }
 .rbox {
   display: flex;
   flex-direction: column;
   border-style: solid;
-  padding: 1em;
+  padding: 0.25em;
   align-items: center;
   min-width: 33%;
-  margin: 0 1em;
-  border-radius:25%;
+  margin: 1em 1em;
+  border-radius: 25%;
 }
 .xbox {
   display: flex;

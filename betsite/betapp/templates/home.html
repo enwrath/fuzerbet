@@ -55,6 +55,14 @@
         }});
       }
 
+      function winnerBet2(match) {
+        let winner = $("#2radio-"+match+" input[type='radio']:checked").val();
+        let points = $('#points2-'+match).val();
+        $.ajax({url: `winnerBet?match=${match}&result=${winner}&points=${points}`, success: function(result){
+          updateData();
+        }});
+      }
+
       function updateWinnerBet(match) {
         let winner = parseInt($("#1radio-"+match+" input[type='radio']:checked").val()) - 1;
         let points = parseInt($('#points-'+match).val());
@@ -65,6 +73,18 @@
         }
         $('#payout-'+match).text(Math.floor(odds[match][winner]*points));
       }
+
+      function updateWinnerBet2(match) {
+        let winner = parseInt($("#2radio-"+match+" input[type='radio']:checked").val());
+        let points = parseInt($('#points2-'+match).val());
+        let max = parseInt($('#points2-'+match).attr('max'));
+        if (points > max) {
+          points = max;
+          $('#points2-'+match).val(max);
+        }
+        $('#payout2-'+match).text(Math.floor(odds[`b-${match}`][winner]*points));
+      }
+
       function createWinnerMatches(matches) {
         let wmatches = []
         for (const m in matches) {
@@ -95,6 +115,68 @@
           </div>`);
           $("#winnermatches").append(betdiv);
           updateWinnerBet(match.id);
+          if (match.bestof === 0) continue;
+
+          let wdiv = '';
+          if (match.bestof === 3){
+            odds[`b-${match.id}`] = [parseFloat(match.resW0), parseFloat(match.resW1), parseFloat(match.resL1), parseFloat(match.resL0)];
+            wdiv = `<label class="rbox"><input type="radio" name="radio2-${match.id}" value="0" checked>
+            <span>2-0 (${match.resW0})</span></label>
+            <label class="rbox"><input type="radio" name="radio2-${match.id}" value="3">
+            <span>0-2 (${match.resL0})</span></label>
+            <label class="rbox"><input type="radio" name="radio2-${match.id}" value="1">
+            <span>2-1 (${match.resW1})</span></label>
+            <label class="rbox"><input type="radio" name="radio2-${match.id}" value="2">
+            <span>1-2 (${match.resL1})</span></label>`
+          } else if (match.bestof === 5) {
+            odds[`b-${match.id}`] = [parseFloat(match.resW0), parseFloat(match.resW1), parseFloat(match.resW2), parseFloat(match.resL2), parseFloat(match.resL1), parseFloat(match.resL0)];
+            wdiv = `<label class="rbox"><input type="radio" name="radio2-${match.id}" value="0" checked>
+            <span>3-0 (${match.resW0})</span></label>
+            <label class="rbox"><input type="radio" name="radio2-${match.id}" value="5" checked>
+            <span>0-3 (${match.resL0})</span></label>
+            <label class="rbox"><input type="radio" name="radio2-${match.id}" value="1" checked>
+            <span>3-1 (${match.resW1})</span></label>
+            <label class="rbox"><input type="radio" name="radio2-${match.id}" value="4" checked>
+            <span>1-3 (${match.resL1})</span></label>
+            <label class="rbox"><input type="radio" name="radio2-${match.id}" value="2" checked>
+            <span>3-2 (${match.resW2})</span></label>
+            <label class="rbox"><input type="radio" name="radio2-${match.id}" value="3" checked>
+            <span>2-3 (${match.resL2})</span></label>`
+          } else if (match.bestof === 7) {
+            odds[`b-${match.id}`] = [parseFloat(match.resW0), parseFloat(match.resW1), parseFloat(match.resW2), parseFloat(match.resW3), parseFloat(match.resL3), parseFloat(match.resL2), parseFloat(match.resL1), parseFloat(match.resL0)];
+            wdiv = `<label class="rbox"><input type="radio" name="radio2-${match.id}" value="0" checked>
+            <span>4-0 (${match.resW0})</span></label>
+            <label class="rbox"><input type="radio" name="radio2-${match.id}" value="7" checked>
+            <span>0-4 (${match.resL0})</span></label>
+            <label class="rbox"><input type="radio" name="radio2-${match.id}" value="1" checked>
+            <span>4-1 (${match.resW1})</span></label>
+            <label class="rbox"><input type="radio" name="radio2-${match.id}" value="6" checked>
+            <span>1-4 (${match.resL1})</span></label>
+            <label class="rbox"><input type="radio" name="radio2-${match.id}" value="2" checked>
+            <span>4-2 (${match.resW2})</span></label>
+            <label class="rbox"><input type="radio" name="radio2-${match.id}" value="5" checked>
+            <span>2-4 (${match.resL2})</span></label>
+            <label class="rbox"><input type="radio" name="radio2-${match.id}" value="3" checked>
+            <span>4-3 (${match.resW3})</span></label>
+            <label class="rbox"><input type="radio" name="radio2-${match.id}" value="4" checked>
+            <span>3-4 (${match.resL3})</span></label>`
+          }
+          let betdiv2 = $(`<div class="betdiv" onchange="updateWinnerBet2(${match.id})" id="winbetdiv2-${match.id}">
+            <h4>${match.title}</h4>
+            <div class="fbox" id="2radio-${match.id}">
+              ${wdiv}
+            </div>
+            <div class="xbox">
+              <label><span>Veto: </span><input type="number" class="wagerinput" id="points2-${match.id}" value="1" min="1" /><span> leikkipenniä</span></label>
+
+            </div>
+            <div class="xbox">
+              <span>Voitto: <span id="payout2-${match.id}"></span> leikkipenniä</span>
+              <button class="betbutton" onclick="winnerBet2(${match.id})">Aseta veto</button>
+            </div>
+          </div>`);
+          $("#winnermatches").append(betdiv2);
+          updateWinnerBet2(match.id);
         }
         $('#winnermatches').children('div').each(function () {
             if (!wmatches.includes(parseInt(this.id.split('-')[1]))) this.remove();
@@ -108,15 +190,42 @@
           let tila = 'Odottaa tulosta';
           let color = 'betgray';
           if (bet.resolved) {
-            color = bet.winner === bet.guess ? 'betgreen' : 'betred';
-            tila = bet.winner === bet.guess ? 'Voitto' : 'Tappio';
+            color = bet.won ? 'betgreen' : 'betred';
+            tila = bet.won ? 'Voitto' : 'Tappio';
           }
-          const p1 = bet.guess === 1 ? `<span class="bettedplayer">${bet.player1}</span>` : bet.player1;
-          const p2 = bet.guess === 2 ? `<span class="bettedplayer">${bet.player2}</span>` : bet.player2;
+
+          let resultguess = bet.player1;
+          if (bet.guess === 2) resultguess = bet.player2;
+          if (bet.resultBet) {
+            if (bet.bestof === 3){
+              if (bet.result === 0) resultguess = '2-0';
+              else if (bet.result === 1) resultguess = '2-1';
+              else if (bet.result === 2) resultguess = '1-2';
+              else if (bet.result === 3) resultguess = '0-2';
+            } else if (bet.bestof === 5) {
+              if (bet.result === 0) resultguess = '3-0';
+              else if (bet.result === 1) resultguess = '3-1';
+              else if (bet.result === 2) resultguess = '3-2';
+              else if (bet.result === 3) resultguess = '2-3';
+              else if (bet.result === 4) resultguess = '1-3';
+              else if (bet.result === 5) resultguess = '0-3';
+            } else if (bet.bestof === 7) {
+              if (bet.result === 0) resultguess = '4-0';
+              else if (bet.result === 1) resultguess = '4-1';
+              else if (bet.result === 2) resultguess = '4-2';
+              else if (bet.result === 3) resultguess = '4-3';
+              else if (bet.result === 4) resultguess = '3-4';
+              else if (bet.result === 5) resultguess = '2-4';
+              else if (bet.result === 6) resultguess = '1-4';
+              else if (bet.result === 7) resultguess = '0-4';
+            }
+          }
+
           const betdiv = $(`<div class="winbethistory ${color}"><div>
           <span>Tila: ${tila}</span></div>
           <div>
-          <p>${bet.title}: ${p1} VS ${p2}<br />
+          <p>${bet.title}: ${bet.player1} VS ${bet.player2}<br />
+          Veikkaus: <span class="bettedplayer">${resultguess}</span> <br />
           Voitto: <span class="bettedplayer">${bet.payout}</span></p>
           </div>
           </div>`);
