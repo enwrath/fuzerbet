@@ -17,7 +17,7 @@ class WinnerMatch(models.Model):
     player2odds = models.DecimalField(default=2,max_digits=5, decimal_places=2)
     player1winchance = models.IntegerField(default=50, verbose_name='Player 1 win chance (%)')
     canBet = models.BooleanField(default=True)
-    winner = models.IntegerField(default=0)
+    winner = models.IntegerField(choices=[(0,'No winner'),(1,'Player 1'),(2,'Player2')], default=0)
     def __str__(self):
         betopen = 'Closed'
         winnerset = 'No winner set '
