@@ -96,28 +96,28 @@ def winnerBet(request):
     if result != -1: #Oispa array käytettävissäääääääh
         w = 1
         if match.bestof == 3:
-            if result == 0: pointWin = int(points * match.resW0)
-            if result == 1: pointWin = int(points * match.resW1)
-            if result == 2: pointWin = int(points * match.resL1)
-            if result == 3: pointWin = int(points * match.resL0)
+            if result == 0: pointsWin = int(points * match.resW0)
+            if result == 1: pointsWin = int(points * match.resW1)
+            if result == 2: pointsWin = int(points * match.resL1)
+            if result == 3: pointsWin = int(points * match.resL0)
             if result > 1: w = 2
         elif match.bestof == 5:
-            if result == 0: pointWin = int(points * match.resW0)
-            if result == 1: pointWin = int(points * match.resW1)
-            if result == 2: pointWin = int(points * match.resW2)
-            if result == 3: pointWin = int(points * match.resL2)
-            if result == 4: pointWin = int(points * match.resL1)
-            if result == 5: pointWin = int(points * match.resL0)
+            if result == 0: pointsWin = int(points * match.resW0)
+            if result == 1: pointsWin = int(points * match.resW1)
+            if result == 2: pointsWin = int(points * match.resW2)
+            if result == 3: pointsWin = int(points * match.resL2)
+            if result == 4: pointsWin = int(points * match.resL1)
+            if result == 5: pointsWin = int(points * match.resL0)
             if result > 2: w = 2
         else:
-            if result == 0: pointWin = int(points * match.resW0)
-            if result == 1: pointWin = int(points * match.resW1)
-            if result == 2: pointWin = int(points * match.resW2)
-            if result == 3: pointWin = int(points * match.resW3)
-            if result == 4: pointWin = int(points * match.resL3)
-            if result == 5: pointWin = int(points * match.resL2)
-            if result == 6: pointWin = int(points * match.resL1)
-            if result == 7: pointWin = int(points * match.resL0)
+            if result == 0: pointsWin = int(points * match.resW0)
+            if result == 1: pointsWin = int(points * match.resW1)
+            if result == 2: pointsWin = int(points * match.resW2)
+            if result == 3: pointsWin = int(points * match.resW3)
+            if result == 4: pointsWin = int(points * match.resL3)
+            if result == 5: pointsWin = int(points * match.resL2)
+            if result == 6: pointsWin = int(points * match.resL1)
+            if result == 7: pointsWin = int(points * match.resL0)
             if result > 3: w = 2
         bet = WinnerBet(match=match, user=request.user, points=points, payout=pointsWin, winner=w, result=result, resultBet=True)
     else:

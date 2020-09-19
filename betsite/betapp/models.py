@@ -16,7 +16,7 @@ class WinnerMatch(models.Model):
     player1odds = models.DecimalField(default=2,max_digits=5, decimal_places=2)
     player2odds = models.DecimalField(default=2,max_digits=5, decimal_places=2)
     player1winchance = models.IntegerField(default=50, verbose_name='Player 1 win chance (%)')
-    bestof = models.IntegerField(choices=[(3,'Bo3'),(5,'Bo5'),(7,'Bo7')], default=3)
+    bestof = models.IntegerField(choices=[(0,'No betting on score'),(3,'Bo3'),(5,'Bo5'),(7,'Bo7')], default=3)
     canBet = models.BooleanField(default=True)
     winner = models.IntegerField(choices=[(0,'No winner'),(1,'Player 1'),(2,'Player2')], default=0)
     resW0 = models.DecimalField(default=2,max_digits=5, decimal_places=2)
@@ -27,8 +27,8 @@ class WinnerMatch(models.Model):
     resL1 = models.DecimalField(default=2,max_digits=5, decimal_places=2)
     resL2 = models.DecimalField(default=2,max_digits=5, decimal_places=2)
     resL3 = models.DecimalField(default=2,max_digits=5, decimal_places=2)
-    p1maps = models.IntegerField(choices=[(0,0),(1,1),(2,2),(3,3),(4,4)], default=0, verbose_name='Map wins: Player 1')
-    p2maps = models.IntegerField(choices=[(0,0),(1,1),(2,2),(3,3),(4,4)], default=0, verbose_name='Map wins: Player 2')
+    p1maps = models.IntegerField(choices=[(0,0),(1,1),(2,2),(3,3),(4,4)], default=0, verbose_name='Map wins: Player 1 (if Bo3+)')
+    p2maps = models.IntegerField(choices=[(0,0),(1,1),(2,2),(3,3),(4,4)], default=0, verbose_name='Map wins: Player 2 (if Bo3+)')
 
     def __str__(self):
         betopen = 'Closed'
@@ -52,8 +52,8 @@ class WinnerMatch(models.Model):
                         if self.bestof == 3:
                             if bet.result == 0 and self.p1maps==2 and self.p2maps==0: won=True
                             elif bet.result == 1 and self.p1maps==2 and self.p2maps==1: won=True
-                            elif bet.result ==2 and self.p1maps==1 and self.p2maps==2: won=True
-                            elif bet.result ==2 and self.p1maps==0 and self.p2maps==2: won=True
+                            elif bet.result == 2 and self.p1maps==1 and self.p2maps==2: won=True
+                            elif bet.result == 3 and self.p1maps==0 and self.p2maps==2: won=True
                         elif self.bestof == 5:
                             if bet.result == 0 and self.p1maps==3 and self.p2maps==0: won=True
                             elif bet.result == 1 and self.p1maps==3 and self.p2maps==1: won=True
