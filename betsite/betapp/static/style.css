@@ -56,7 +56,7 @@ hr {
   font-weight: bold;
 }
 .wagerinput {
-  background-color: #272129;
+  background-color: #171419;
   color: #b1acac;
   border: none;
   display: inline-block;
@@ -83,7 +83,7 @@ hr {
   align-items: center;
 }
 .betbutton {
-  min-width: 25%;
+  min-width: 85%;
   background-color: #121219;
   border: none;
   height: 3em;
