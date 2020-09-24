@@ -13,20 +13,20 @@ class WinnerMatch(models.Model):
     title = models.CharField(max_length=200)
     player1 = models.CharField(max_length=200)
     player2 = models.CharField(max_length=200)
-    player1odds = models.DecimalField(default=2,max_digits=5, decimal_places=2)
-    player2odds = models.DecimalField(default=2,max_digits=5, decimal_places=2)
+    player1odds = models.DecimalField(default=2,max_digits=11, decimal_places=2)
+    player2odds = models.DecimalField(default=2,max_digits=11, decimal_places=2)
     player1winchance = models.IntegerField(default=50, verbose_name='Player 1 win chance (%)')
     bestof = models.IntegerField(choices=[(0,'No betting on score'),(3,'Bo3'),(5,'Bo5'),(7,'Bo7')], default=3)
     canBet = models.BooleanField(default=True)
     winner = models.IntegerField(choices=[(0,'No winner'),(1,'Player 1'),(2,'Player2')], default=0)
-    resW0 = models.DecimalField(default=2,max_digits=5, decimal_places=2)
-    resW1 = models.DecimalField(default=2,max_digits=5, decimal_places=2)
-    resW2 = models.DecimalField(default=2,max_digits=5, decimal_places=2)
-    resW3 = models.DecimalField(default=2,max_digits=5, decimal_places=2)
-    resL0 = models.DecimalField(default=2,max_digits=5, decimal_places=2)
-    resL1 = models.DecimalField(default=2,max_digits=5, decimal_places=2)
-    resL2 = models.DecimalField(default=2,max_digits=5, decimal_places=2)
-    resL3 = models.DecimalField(default=2,max_digits=5, decimal_places=2)
+    resW0 = models.DecimalField(default=2,max_digits=11, decimal_places=2) #with 99% winchance, we need this many numbers :D
+    resW1 = models.DecimalField(default=2,max_digits=11, decimal_places=2)
+    resW2 = models.DecimalField(default=2,max_digits=11, decimal_places=2)
+    resW3 = models.DecimalField(default=2,max_digits=11, decimal_places=2)
+    resL0 = models.DecimalField(default=2,max_digits=11, decimal_places=2)
+    resL1 = models.DecimalField(default=2,max_digits=11, decimal_places=2)
+    resL2 = models.DecimalField(default=2,max_digits=11, decimal_places=2)
+    resL3 = models.DecimalField(default=2,max_digits=11, decimal_places=2)
     p1maps = models.IntegerField(choices=[(0,0),(1,1),(2,2),(3,3),(4,4)], default=0, verbose_name='Map wins: Player 1 (if Bo3+)')
     p2maps = models.IntegerField(choices=[(0,0),(1,1),(2,2),(3,3),(4,4)], default=0, verbose_name='Map wins: Player 2 (if Bo3+)')
 
@@ -92,6 +92,8 @@ class WinnerMatch(models.Model):
 
         wc = self.player1winchance/100
         lc = (100-self.player1winchance)/100
+
+        print("winchance: " + str(wc) + " | " + str(lc))
         if self.bestof == 3:
             self.resW0 = round(1/(wc*wc), 2)
             self.resW1 = round(1/(2*wc*wc*lc), 2)

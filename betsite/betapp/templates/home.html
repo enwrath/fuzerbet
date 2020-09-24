@@ -71,7 +71,7 @@
           points = max;
           $('#points-'+match).val(max);
         }
-        $('#payout-'+match).text(Math.floor(odds[match][winner]*points));
+        $('#payout-'+match).val(Math.floor(odds[match][winner]*points));
       }
 
       function updateWinnerBet2(match) {
@@ -82,7 +82,7 @@
           points = max;
           $('#points2-'+match).val(max);
         }
-        $('#payout2-'+match).text(Math.floor(odds[`b-${match}`][winner]*points));
+        $('#payout2-'+match).val(Math.floor(odds[`b-${match}`][winner]*points));
       }
 
       function createWinnerMatches(matches) {
@@ -95,24 +95,26 @@
           }
           odds[match.id] = [parseFloat(match.player1odds), parseFloat(match.player2odds)];
           let betdiv = $(`<div class="betdiv" onchange="updateWinnerBet(${match.id})" id="winbetdiv-${match.id}">
-            <h3>${match.title}</h4>
-            <h3>${match.player1} - ${match.player2}</h5>
+            <p class="bettitle">${match.title}<br />
+            ${match.player1} - ${match.player2}</p>
+            <hr />
             <div class="fbox" id="1radio-${match.id}">
-              <label class="rbox">
-              <input type="radio" name="radio-${match.id}" value="1" checked>
-              <span>${match.player1} (${match.player1odds})</span></label>
-              <label class="rbox">
-              <input type="radio" name="radio-${match.id}" value="2">
-              <span>${match.player2} (${match.player2odds})</span></label>
-            </div>
-            <div class="xbox">
-              <label><span>Veto: </span><input type="number" class="wagerinput" id="points-${match.id}" value="1" min="1" /><span> leikkipenniä</span></label>
+              <input type="radio" id="radio-${match.id}-1" class="radiobtn" name="radio-${match.id}" value="1" checked>
+              <label class="rbox" for="radio-${match.id}-1"><span>${match.player1} (${match.player1odds})</span></label>
+
+              <input type="radio" id="radio-${match.id}-2" class="radiobtn" name="radio-${match.id}" value="2">
+              <label class="rbox" for="radio-${match.id}-2"><span>${match.player2} (${match.player2odds})</span></label>
 
             </div>
-            <div class="xbox">
-              <span>Voitto: <span id="payout-${match.id}"></span> leikkipenniä</span>
-              <button class="betbutton" onclick="winnerBet(${match.id})">Aseta veto</button>
+            <div class="fbox">
+              <div class="wagerdiv">
+                <label class="wagerlabel" for="points-${match.id}">Veto:</label><input type="number" class="wagerinput" id="points-${match.id}" value="1" min="1" />
+              </div>
+              <div class="wagerdiv">
+                <label class="wagerlabel" for="payout-${match.id}">Voitto:</label><input type="number" class="wagerinput" id="payout-${match.id}" value="1" min="1" disabled />
+              </div>
             </div>
+            <button class="betbutton" onclick="winnerBet(${match.id})">Aseta veto</button>
           </div>`);
           $("#winnermatches").append(betdiv);
           updateWinnerBet(match.id);
@@ -121,61 +123,63 @@
           let wdiv = '';
           if (match.bestof === 3){
             odds[`b-${match.id}`] = [parseFloat(match.resW0), parseFloat(match.resW1), parseFloat(match.resL1), parseFloat(match.resL0)];
-            wdiv = `<label class="rbox"><input type="radio" name="radio2-${match.id}" value="0" checked>
+            wdiv = `<input class="radiobtn" id="radio2-${match.id}-0" type="radio" name="radio2-${match.id}" value="0" checked><label for="radio2-${match.id}-0" class="rbox">
             <span>2-0 (${match.resW0})</span></label>
-            <label class="rbox"><input type="radio" name="radio2-${match.id}" value="3">
+            <input class="radiobtn" id="radio2-${match.id}-3" type="radio" name="radio2-${match.id}" value="3"><label for="radio2-${match.id}-3" class="rbox">
             <span>0-2 (${match.resL0})</span></label>
-            <label class="rbox"><input type="radio" name="radio2-${match.id}" value="1">
+            <input class="radiobtn" id="radio2-${match.id}-1" type="radio" name="radio2-${match.id}" value="1"><label for="radio2-${match.id}-1" class="rbox">
             <span>2-1 (${match.resW1})</span></label>
-            <label class="rbox"><input type="radio" name="radio2-${match.id}" value="2">
+            <input class="radiobtn" id="radio2-${match.id}-2" type="radio" name="radio2-${match.id}" value="2"><label for="radio2-${match.id}-2" class="rbox">
             <span>1-2 (${match.resL1})</span></label>`
           } else if (match.bestof === 5) {
             odds[`b-${match.id}`] = [parseFloat(match.resW0), parseFloat(match.resW1), parseFloat(match.resW2), parseFloat(match.resL2), parseFloat(match.resL1), parseFloat(match.resL0)];
-            wdiv = `<label class="rbox"><input type="radio" name="radio2-${match.id}" value="0" checked>
+            wdiv = `<input class="radiobtn" id="radio2-${match.id}-0" type="radio" name="radio2-${match.id}" value="0" checked><label for="radio2-${match.id}-0" class="rbox">
             <span>3-0 (${match.resW0})</span></label>
-            <label class="rbox"><input type="radio" name="radio2-${match.id}" value="5" checked>
+            <input class="radiobtn" id="radio2-${match.id}-5" type="radio" name="radio2-${match.id}" value="5"><label for="radio2-${match.id}-5" class="rbox">
             <span>0-3 (${match.resL0})</span></label>
-            <label class="rbox"><input type="radio" name="radio2-${match.id}" value="1" checked>
+            <input class="radiobtn" id="radio2-${match.id}-1" type="radio" name="radio2-${match.id}" value="1"><label for="radio2-${match.id}-1" class="rbox">
             <span>3-1 (${match.resW1})</span></label>
-            <label class="rbox"><input type="radio" name="radio2-${match.id}" value="4" checked>
+            <input class="radiobtn" id="radio2-${match.id}-4" type="radio" name="radio2-${match.id}" value="4"><label for="radio2-${match.id}-4" class="rbox">
             <span>1-3 (${match.resL1})</span></label>
-            <label class="rbox"><input type="radio" name="radio2-${match.id}" value="2" checked>
+            <input class="radiobtn" id="radio2-${match.id}-2" type="radio" name="radio2-${match.id}" value="2"><label for="radio2-${match.id}-2" class="rbox">
             <span>3-2 (${match.resW2})</span></label>
-            <label class="rbox"><input type="radio" name="radio2-${match.id}" value="3" checked>
+            <input class="radiobtn" id="radio2-${match.id}-3" type="radio" name="radio2-${match.id}" value="3"><label for="radio2-${match.id}-3" class="rbox">
             <span>2-3 (${match.resL2})</span></label>`
           } else if (match.bestof === 7) {
             odds[`b-${match.id}`] = [parseFloat(match.resW0), parseFloat(match.resW1), parseFloat(match.resW2), parseFloat(match.resW3), parseFloat(match.resL3), parseFloat(match.resL2), parseFloat(match.resL1), parseFloat(match.resL0)];
-            wdiv = `<label class="rbox"><input type="radio" name="radio2-${match.id}" value="0" checked>
+            wdiv = `<input class="radiobtn" type="radio" id="radio2-${match.id}-0" name="radio2-${match.id}" value="0" checked><label for="radio2-${match.id}-0" class="rbox">
             <span>4-0 (${match.resW0})</span></label>
-            <label class="rbox"><input type="radio" name="radio2-${match.id}" value="7" checked>
+            <input class="radiobtn" type="radio" id="radio2-${match.id}-7" name="radio2-${match.id}" value="7"><label for="radio2-${match.id}-7" class="rbox">
             <span>0-4 (${match.resL0})</span></label>
-            <label class="rbox"><input type="radio" name="radio2-${match.id}" value="1" checked>
+            <input class="radiobtn" type="radio" id="radio2-${match.id}-1" name="radio2-${match.id}" value="1"><label for="radio2-${match.id}-1" class="rbox">
             <span>4-1 (${match.resW1})</span></label>
-            <label class="rbox"><input type="radio" name="radio2-${match.id}" value="6" checked>
+            <input class="radiobtn" type="radio" id="radio2-${match.id}-6" name="radio2-${match.id}" value="6"><label for="radio2-${match.id}-6" class="rbox">
             <span>1-4 (${match.resL1})</span></label>
-            <label class="rbox"><input type="radio" name="radio2-${match.id}" value="2" checked>
+            <input class="radiobtn" type="radio" id="radio2-${match.id}-2" name="radio2-${match.id}" value="2"><label for="radio2-${match.id}-2" class="rbox">
             <span>4-2 (${match.resW2})</span></label>
-            <label class="rbox"><input type="radio" name="radio2-${match.id}" value="5" checked>
+            <input class="radiobtn" type="radio" id="radio2-${match.id}-5" name="radio2-${match.id}" value="5"><label for="radio2-${match.id}-5" class="rbox">
             <span>2-4 (${match.resL2})</span></label>
-            <label class="rbox"><input type="radio" name="radio2-${match.id}" value="3" checked>
+            <input class="radiobtn" type="radio" id="radio2-${match.id}-3" name="radio2-${match.id}" value="3"><label for="radio2-${match.id}-3" class="rbox">
             <span>4-3 (${match.resW3})</span></label>
-            <label class="rbox"><input type="radio" name="radio2-${match.id}" value="4" checked>
+            <input class="radiobtn" type="radio" id="radio2-${match.id}-4" name="radio2-${match.id}" value="4"><label for="radio2-${match.id}-4" class="rbox">
             <span>3-4 (${match.resL3})</span></label>`
           }
           let betdiv2 = $(`<div class="betdiv" onchange="updateWinnerBet2(${match.id})" id="winbetdiv2-${match.id}">
-            <h3>${match.title}</h4>
-            <h3>${match.player1} - ${match.player2}</h5>
+            <p class="bettitle">${match.title}<br />
+            ${match.player1} - ${match.player2}</p>
+            <hr />
             <div class="fbox" id="2radio-${match.id}">
               ${wdiv}
             </div>
-            <div class="xbox">
-              <label><span>Veto: </span><input type="number" class="wagerinput" id="points2-${match.id}" value="1" min="1" /><span> leikkipenniä</span></label>
-
+            <div class="fbox">
+              <div class="wagerdiv">
+                <label class="wagerlabel" for="points2-${match.id}">Veto:</label><input type="number" class="wagerinput" id="points2-${match.id}" value="1" min="1" />
+              </div>
+              <div class="wagerdiv">
+                <label class="wagerlabel" for="payout2-${match.id}">Voitto:</label><input type="number" class="wagerinput" id="payout2-${match.id}" value="1" min="1" disabled />
+              </div>
             </div>
-            <div class="xbox">
-              <span>Voitto: <span id="payout2-${match.id}"></span> leikkipenniä</span>
-              <button class="betbutton" onclick="winnerBet2(${match.id})">Aseta veto</button>
-            </div>
+            <button class="betbutton" onclick="winnerBet2(${match.id})">Aseta veto</button>
           </div>`);
           $("#winnermatches").append(betdiv2);
           updateWinnerBet2(match.id);

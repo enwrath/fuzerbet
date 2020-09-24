@@ -3,40 +3,78 @@
   flex-direction: column;
   align-items: center;
 }
-input {
-  width: 6em;
-  margin: 1em 0;
-}
 body {
   text-align: center;
-  background-color: #272d2d;
+  background-color: #171717;
   color: white;
+  font-size: medium;
 }
 .betdiv {
-  background-color: #a9b2c5;
-  width: fit-content;
+  background-color: #2d2f40;
+  width: 90%;
   padding: 1em;
   text-align: center;
-  min-width: 60%;
   margin-bottom: 1em;
-  color: black;
-  border-radius: 3em;
+  color: #b1acac;
+  border-radius: 10px;
 }
-
+@media only screen and (min-width: 768px) {
+  .betdiv {
+    width: 600px;
+  }
+}
+.bettitle {
+  text-align: left;
+  margin: 0;
+}
+hr {
+  border: 1px solid black;
+}
 .fbox {
   display: flex;
   justify-content: space-evenly;
   flex-wrap: wrap;
+  align-items: center;
+  margin-bottom: 0.5em;
+  font-size: large;
 }
 .rbox {
-  display: flex;
-  flex-direction: column;
-  border-style: solid;
+  flex: 0 40%;
   padding: 0.25em;
   align-items: center;
-  min-width: 33%;
-  margin: 1em 1em;
-  border-radius: 25%;
+  background-color: #121219;
+  margin-bottom: 0.25em;
+}
+.rbox:hover {
+  background-color: #59597d;
+}
+.radiobtn {
+  display: none;
+}
+.radiobtn:checked+label {
+  background-color: #59597d;
+  font-weight: bold;
+}
+.wagerinput {
+  background-color: #272129;
+  color: #b1acac;
+  border: none;
+  display: inline-block;
+  padding: 0;
+  text-align: center;
+  font-size: large;
+  font-weight: bold;
+  width: 50%;
+}
+.wagerdiv {
+  background-color: #272129;
+  font-weight: bold;
+  flex: 0 40%;
+  padding: 0.25em;
+}
+.wagerlabel {
+  width: 50%;
+  display: inline-block;
 }
 .xbox {
   display: flex;
@@ -44,16 +82,17 @@ body {
   padding: 1em;
   align-items: center;
 }
-:checked + span {
-  font-weight: bold;
-}
 .betbutton {
   min-width: 25%;
-  background-color: #c3eac3;
-  border-radius: 1em;
+  background-color: #121219;
+  border: none;
   height: 3em;
   font-size: large;
   font-weight: bold;
+  color: inherit;
+}
+.betbutton:hover {
+  background-color: #59597d;
 }
 a.button {
   text-decoration: none;
