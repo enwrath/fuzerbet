@@ -6,7 +6,7 @@
 body {
   text-align: center;
   background-color: #171717;
-  color: white;
+  color: #b1acac;
   font-size: medium;
 }
 .betdiv {
@@ -108,9 +108,7 @@ a.button {
 }
 
 #bethistorydiv {
-  background-color: #3e3e3e;
   width: fit-content;
-  margin: auto;
 }
 .accordion {
   background-color: #a9b2c5;
@@ -141,13 +139,13 @@ a.button {
 }
 
 .betgreen {
-  background-color: #7ca27c;
+  background-color: #395439;
 }
 .betred {
-  background-color: #ca8989;
+  background-color: #774747;
 }
 .betgray {
-  background-color: #a29f9f;
+  background-color: #5a5858;
 }
 .winbethistory {
   color: black;
@@ -155,8 +153,29 @@ a.button {
   text-align: left;
   border-style: solid;
   border-width: thin;
+  font-size: large;
 }
 .bettedplayer {
   font-weight: bold;
   text-decoration: underline;
+}
+
+#mainContent {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: space-evenly;
+  align-items: flex-start;
+  max-width: 1300px;
+  margin: auto;
+}
+header {
+  position: sticky;
+  top: 0;
+  background-color: #1f2240;
+  margin: 0;
+  padding: 0.5em;
+  text-align: left;
+  display: flex;
+  justify-content: space-evenly;
+  font-size: large;
 }

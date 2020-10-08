@@ -11,21 +11,25 @@
     <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.5.1/jquery.min.js" integrity="sha512-bLT0Qm9VnAYZDflyKcBaQ2gg0hSYNQrJ8RilYldYQ1FxQYoCLtUjuuRuZo+fjqhx/qtq/1itJ0C2ejDxltZVFg==" crossorigin="anonymous"></script>
 </head>
 <body>
-    <h1>Fuzerbet</h1>
     {% load socialaccount %}
 
     {% if user.is_authenticated %}
-    <p>
-      Nimi: {{ user }} <br />
-      Sinulla on <span id="points"></span> leikkipenniä.
-    </p>
-
-    <h3>Avoimet kohteet:</h3>
-    <div id="winnermatches">
-    </div>
-    <div id='bethistorydiv'>
-      <button id="bethistoryaccordion" class="accordion" onclick="toggleAccordion()">Veikkaushistoria</button>
-      <div id="winnerbets" class="accordioncontent">
+    <header>
+      <span>Fuzerbetlogo!!!</span>
+      <span>Pennejä: <span id="points"></span></span>
+    </header>
+    <div id="mainContent">
+      <div>
+        <h3>Avoimet kohteet:</h3>
+        <div id="winnermatches">
+        </div>
+      </div>
+      <div id='bethistorydiv'>
+        <!--<button id="bethistoryaccordion" class="accordion" onclick="toggleAccordion()">Veikkaushistoria</button>
+        <div id="winnerbets" class="accordioncontent">-->
+        <h3>Veikkaushistoria:</h3>
+        <div id="winnerbets">
+        </div>
       </div>
     </div>
     <script>
@@ -254,6 +258,7 @@
       }
     </script>
     {% else %}
+    <h1>Fuzerbet</h1>
     Log in with <a href="{% provider_login_url "twitch" next="/" %}" class="button">Twitch</a>
     {% endif %}
 </body>
