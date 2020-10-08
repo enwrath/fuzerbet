@@ -84,7 +84,7 @@ hr {
 }
 .betbutton {
   min-width: 85%;
-  background-color: #121219;
+  background-color: #445f25;
   border: none;
   height: 3em;
   font-size: large;
@@ -92,7 +92,7 @@ hr {
   color: inherit;
 }
 .betbutton:hover {
-  background-color: #59597d;
+  background-color: #5c8034;
 }
 a.button {
   text-decoration: none;
