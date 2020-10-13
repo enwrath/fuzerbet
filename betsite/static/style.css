@@ -18,6 +18,15 @@ body {
   color: #b1acac;
   border-radius: 10px;
 }
+
+.betdiv2 {
+  background-color: #2d2f40;
+  padding: 1em;
+  text-align: center;
+  margin-bottom: 1em;
+  color: #b1acac;
+  border-radius: 10px;
+}
 @media only screen and (min-width: 768px) {
   .betdiv {
     width: 600px;
@@ -26,6 +35,11 @@ body {
 .bettitle {
   text-align: left;
   margin: 0;
+}
+.bettitlediv {
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
 }
 hr {
   border: 1px solid black;
@@ -139,13 +153,17 @@ a.button {
 }
 
 .betgreen {
-  background-color: #395439;
+  color: #83d483;
 }
 .betred {
-  background-color: #774747;
+  color: #de5151;
 }
 .betgray {
-  background-color: #5a5858;
+  color: #5a5858;
+}
+.betstatus {
+  float: right;
+  font-size: xx-large;
 }
 .winbethistory {
   color: black;

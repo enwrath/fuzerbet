@@ -233,13 +233,16 @@
             }
           }
 
-          const betdiv = $(`<div class="winbethistory ${color}"><div>
-          <span>Tila: ${tila}</span></div>
-          <div>
-          <p>${bet.title}: ${bet.player1} VS ${bet.player2}<br />
+          const betdiv = $(`<div class="betdiv2"><div>
+          <span class="betstatus ${color}">●</span>
+          <p class="bettitle">${bet.title}<br />
+          ${bet.player1} - ${bet.player2}</p>
+
+          <hr />
+          <p class="bettitle">
+          Tila: ${tila} <br />
           Veikkaus: <span class="bettedplayer">${resultguess}</span> <br />
-          Voitto: <span class="bettedplayer">${bet.payout}</span></p>
-          </div>
+          Voittosumma: <span class="bettedplayer">${bet.payout}</span></p>
           </div>`);
 
           $("#winnerbets").prepend(betdiv);
