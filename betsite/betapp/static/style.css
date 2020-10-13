@@ -165,8 +165,11 @@ a.button {
   flex-wrap: wrap;
   justify-content: space-evenly;
   align-items: flex-start;
-  max-width: 1300px;
   margin: auto;
+}
+
+.maxwidth {
+    max-width: 1300px;
 }
 header {
   position: sticky;
@@ -174,8 +177,24 @@ header {
   background-color: #1f2240;
   margin: 0;
   padding: 0.5em;
+}
+
+#headercontent {
   text-align: left;
   display: flex;
   justify-content: space-evenly;
   font-size: large;
+  margin: auto;
+  align-items: center;
+}
+.mainlogo {
+  text-decoration: none;
+  padding: 0.5em 1em;
+  margin-left: 0.5em;
+  display: inline-block;
+  text-shadow: none;
+  background: #d0d0d0;
+  border-radius: 6px;
+  color: #000;
+  font-weight: bold;
 }

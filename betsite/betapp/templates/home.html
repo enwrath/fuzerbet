@@ -15,10 +15,12 @@
 
     {% if user.is_authenticated %}
     <header>
-      <span>Fuzerbetlogo!!!</span>
-      <span>Pennejä: <span id="points"></span></span>
+      <div id="headercontent" class="maxwidth">
+        <span class="mainlogo">Fuzerbetlogo</span>
+        <span>Pennejä: <span id="points"></span></span>
+      </div>
     </header>
-    <div id="mainContent">
+    <div id="mainContent" class="maxwidth">
       <div>
         <h3>Avoimet kohteet:</h3>
         <div id="winnermatches">
