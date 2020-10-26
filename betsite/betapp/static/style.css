@@ -122,7 +122,9 @@ a.button {
 }
 
 #bethistorydiv {
-  width: fit-content;
+  display: none;
+  max-width: 600px;
+  margin: auto;
 }
 .accordion {
   background-color: #a9b2c5;
@@ -179,10 +181,6 @@ a.button {
 }
 
 #mainContent {
-  display: flex;
-  flex-wrap: wrap;
-  justify-content: space-evenly;
-  align-items: flex-start;
   margin: auto;
 }
 
@@ -192,9 +190,6 @@ a.button {
 header {
   position: sticky;
   top: 0;
-  background-color: #1f2240;
-  margin: 0;
-  padding: 0.5em;
 }
 
 #headercontent {
@@ -204,6 +199,13 @@ header {
   font-size: large;
   margin: auto;
   align-items: center;
+  background-color: #1f2240;
+  margin: 0;
+  padding: 0.5em;
+}
+#headernavigation {
+  background-color: #1f2240;
+  margin: 0;
 }
 .mainlogo {
   text-decoration: none;
