@@ -185,7 +185,7 @@ a.button {
 }
 
 .maxwidth {
-    max-width: 1300px;
+    max-width: 900px;
 }
 header {
   position: sticky;
@@ -200,8 +200,11 @@ header {
   font-size: large;
   margin: auto;
   align-items: center;
-  margin: 0;
+  margin: auto;
   padding: 0.5em;
+}
+#headernavigation {
+  margin: auto;
 }
 .mainlogo {
   text-decoration: none;

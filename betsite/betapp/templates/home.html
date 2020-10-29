@@ -19,7 +19,7 @@
         <span class="mainlogo">Fuzerbetlogo</span>
         <span>Pennejä: <span id="points"></span></span>
       </div>
-      <div id="headernavigation">
+      <div id="headernavigation" class="maxwidth">
         <div class="fbox" id="topmenu">
           <input type="radio" id="menu1" class="radiobtn" name="menu" value="1" checked onchange="menuToggle()">
           <label class="rbox" for="menu1"><span>Avoimet kohteet</span></label>
@@ -288,8 +288,14 @@
       }
     </script>
     {% else %}
-    <h1>Fuzerbet</h1>
-    Log in with <a href="{% provider_login_url "twitch" next="/" %}" class="button">Twitch</a>
+    <header>
+      <div id="headercontent" class="maxwidth">
+        <span class="mainlogo">Fuzerbetlogo</span>
+        <a href="{% provider_login_url "twitch" next="/" %}" class="button">Twitch-login</a>
+      </div>
+    </header>
+    <br /><br />
+    Kirjaudu sisään käyttämällä Twitch-tililläsi: <a href="{% provider_login_url "twitch" next="/" %}" class="button">Twitch</a>
     {% endif %}
 </body>
 </html>
