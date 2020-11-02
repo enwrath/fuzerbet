@@ -28,10 +28,24 @@
       .row {
         display: flex;
         justify-content: space-evenly;
-        font-size: large;
+        font-size: 24px;
         font-weight: bold;
         text-shadow: 0 0 3px black, 0 0 3px black, 0 0 3px black, 0 0 3px black;
         color: white;
+      }
+      #leftpoint {
+        font-size: 24px;
+        font-weight: 900;
+        float: left;
+        margin-top: -27px;
+        margin-left: 10px;
+      }
+      #rightpoint {
+        font-size: 24px;
+        font-weight: 900;
+        float: right;
+        margin-top: -27px;
+        margin-right: 10px;
       }
 		</style>
 
@@ -44,6 +58,8 @@
     </div>
 		<div class="progress-bar">
 			<span class="progress-bar-fill" style="width: 50%;"></span>
+      <span id="leftpoint"></span>
+      <span id="rightpoint"></span>
 		</div>
 	</div>
   <script>
@@ -63,8 +79,10 @@
       if (ratio < 1) ratio = 1;
       if (ratio > 99) ratio = 99;
       $('.progress-bar-fill').css('width', `${ratio}%`);
-      $("#player1").text(data.player1)
-      $("#player2").text(data.player2)
+      $("#player1").text(data.player1);
+      $("#player2").text(data.player2);
+      $("#leftpoint").text(data.player1points);
+      $("#rightpoint").text(data.player2points);
     }
 
   </script>
