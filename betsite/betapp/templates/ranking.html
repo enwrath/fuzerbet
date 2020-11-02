@@ -6,15 +6,17 @@
     <meta http-equiv="X-UA-Compatible" content="ie=edge">
     <title>Fuzer bet</title>
     <style>
-      tr:nth-child(even) {
-        background-color: #f2f2f2;
+      tr:nth-child(odd) {
+        background-color: #918fc3;
       }
       table {
-        border-collapse: collapse;
-        min-width: 40%;
+        background-color: #b4b2e0;
       }
       th {
-        text-align: left;
+        text-align: center;
+      }
+      td {
+        text-align: center;
       }
       body {
         font-size: large;
@@ -24,10 +26,15 @@
 </head>
 <body onload="updateData()">
   <table>
+  <colgroup>
+    <col style="width:48px">
+    <col style="width:96px">
+    <col style="width:240px">
+  </colgroup>
     <tr>
       <th>#</th>
-      <th>Nimi</th>
       <th>Pisteet</th>
+      <th>Nimi</th>
     </tr>
   </table>
 
@@ -43,7 +50,7 @@
       $('tr').slice(1).remove();
       for (value in data.rankings) {
         const row = $(`<tr>
-          <td>${parseInt(value)+1}</td><td>${data.rankings[value].name}</td><td>${data.rankings[value].points}</td>
+          <td>${parseInt(value)+1}</td><td>${data.rankings[value].points}</td><td>${data.rankings[value].name}</td>
           </tr>`);
         $("table").append(row);
       }
