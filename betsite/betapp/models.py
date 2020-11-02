@@ -3,7 +3,7 @@ from django.contrib.auth.models import User
 
 class Points(models.Model):
     user = models.ForeignKey(User, on_delete=models.CASCADE)
-    points = models.IntegerField(default=100)
+    points = models.DecimalField(default=100,max_digits=15, decimal_places=2)
     def __str__(self):
         return 'Points {}'.format(self.user.username)
     class Meta:
@@ -120,8 +120,8 @@ class WinnerMatch(models.Model):
 class WinnerBet(models.Model):
     user = models.ForeignKey(User, on_delete=models.CASCADE)
     match = models.ForeignKey(WinnerMatch, on_delete=models.CASCADE)
-    points = models.IntegerField(default=0)
-    payout = models.IntegerField(default=0)
+    points = models.DecimalField(default=0,max_digits=15, decimal_places=2)
+    payout = models.DecimalField(default=0,max_digits=15, decimal_places=2)
     winner = models.IntegerField(default=0)
     result = models.IntegerField(default=0)
     resolved = models.BooleanField(default=False)

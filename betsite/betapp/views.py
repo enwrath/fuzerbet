@@ -75,7 +75,7 @@ def rankingUpdate(request):
 
 @login_required
 def winnerBet(request):
-    points = int(request.GET.get('points', '0'))
+    points = float(request.GET.get('points', '0'))
     match = int(request.GET.get('match', '-1'))
     winner = int(request.GET.get('winner', '0'))
     result = int(request.GET.get('result', '-1'))
@@ -83,47 +83,48 @@ def winnerBet(request):
         return HttpResponse("Missing parameters")
     p = Points.objects.get_or_create(user=request.user)[0]
     if points > p.points:
-        return HttpResponse("Not enough points")
+        #just all in
+        points = float(p.points)
     try:
         match = WinnerMatch.objects.get(pk=match)
     except ObjectDoesNotExist:
         return HttpResponse("No such match")
     if match.canBet == False:
         return HttpResponse("Closed")
-    pointsWin = int(points * match.player1odds)
-    if winner == 2: pointsWin = int(points * match.player2odds)
+    pointsWin = points * float(match.player1odds)
+    if winner == 2: pointsWin = points * float(match.player2odds)
 
     if result != -1: #Oispa array käytettävissäääääääh
         w = 1
         if match.bestof == 3:
-            if result == 0: pointsWin = int(points * match.resW0)
-            if result == 1: pointsWin = int(points * match.resW1)
-            if result == 2: pointsWin = int(points * match.resL1)
-            if result == 3: pointsWin = int(points * match.resL0)
+            if result == 0: pointsWin = points * float(match.resW0)
+            if result == 1: pointsWin = points * float(match.resW1)
+            if result == 2: pointsWin = points * float(match.resL1)
+            if result == 3: pointsWin = points * float(match.resL0)
             if result > 1: w = 2
         elif match.bestof == 5:
-            if result == 0: pointsWin = int(points * match.resW0)
-            if result == 1: pointsWin = int(points * match.resW1)
-            if result == 2: pointsWin = int(points * match.resW2)
-            if result == 3: pointsWin = int(points * match.resL2)
-            if result == 4: pointsWin = int(points * match.resL1)
-            if result == 5: pointsWin = int(points * match.resL0)
+            if result == 0: pointsWin = points * float(match.resW0)
+            if result == 1: pointsWin = points * float(match.resW1)
+            if result == 2: pointsWin = points * float(match.resW2)
+            if result == 3: pointsWin = points * float(match.resL2)
+            if result == 4: pointsWin = points * float(match.resL1)
+            if result == 5: pointsWin = points * float(match.resL0)
             if result > 2: w = 2
         else:
-            if result == 0: pointsWin = int(points * match.resW0)
-            if result == 1: pointsWin = int(points * match.resW1)
-            if result == 2: pointsWin = int(points * match.resW2)
-            if result == 3: pointsWin = int(points * match.resW3)
-            if result == 4: pointsWin = int(points * match.resL3)
-            if result == 5: pointsWin = int(points * match.resL2)
-            if result == 6: pointsWin = int(points * match.resL1)
-            if result == 7: pointsWin = int(points * match.resL0)
+            if result == 0: pointsWin = points * float(match.resW0)
+            if result == 1: pointsWin = points * float(match.resW1)
+            if result == 2: pointsWin = points * float(match.resW2)
+            if result == 3: pointsWin = points * float(match.resW3)
+            if result == 4: pointsWin = points * float(match.resL3)
+            if result == 5: pointsWin = points * float(match.resL2)
+            if result == 6: pointsWin = points * float(match.resL1)
+            if result == 7: pointsWin = points * float(match.resL0)
             if result > 3: w = 2
         bet = WinnerBet(match=match, user=request.user, points=points, payout=pointsWin, winner=w, result=result, resultBet=True)
     else:
         bet = WinnerBet(match=match, user=request.user, points=points, payout=pointsWin, winner=winner, resultBet=False)
 
     bet.save()
-    p.points -= points
+    p.points = float(p.points) - points
     p.save()
     return HttpResponse("Success")
