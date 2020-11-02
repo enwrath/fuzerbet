@@ -73,8 +73,8 @@
 
     function handleData(data) {
       let ratio = 50;
-      if (data.player1points != 0 || data.player2points != 0) {
-        ratio = data.player1points / (data.player1points+data.player2points) *100;
+      if (parseFloat(data.player1points) > 0 || parseFloat(data.player2points) > 0) {
+        ratio = parseFloat(data.player1points) / (parseFloat(data.player1points)+parseFloat(data.player2points)) *100;
       }
       if (ratio < 1) ratio = 1;
       if (ratio > 99) ratio = 99;
