@@ -33,7 +33,7 @@ STATICFILES_DIRS = (
 # See https://docs.djangoproject.com/en/3.1/howto/deployment/checklist/
 
 # SECURITY WARNING: keep the secret key used in production secret!
-SECRET_KEY = '!hx!0)_#0^2+0bck2c_kh!==7!*9r0-s)xi(+1l(w!oi!g9n3x'
+SECRET_KEY = 'SUPERSECRETTESTKEY'
 
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
@@ -156,8 +156,8 @@ SOCIALACCOUNT_PROVIDERS = {
         # (``socialaccount`` app) containing the required client
         # credentials, or list them here:
         'APP': {
-            'client_id': 'ajmukmdr1w65lpucnb9mkpuwpd1d97',
-            'secret': 'cfy28aipwrmtj22zi6c0lkxrsk826s',
+            'client_id': 'get new ids from',
+            'secret': 'https://dev.twitch.tv/',
             'key': ''
         }
     }
