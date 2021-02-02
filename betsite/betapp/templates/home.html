@@ -16,36 +16,73 @@
     {% if user.is_authenticated %}
     <header>
       <div id="headercontent" class="maxwidth">
-        <span class="mainlogo">Fuzerbetlogo</span>
+        <a href="/" class="mainlogo">Fuzerbetlogo</a>
         <span>Pisteet: <span id="points"></span></span>
       </div>
       <div id="headernavigation" class="maxwidth">
         <div class="fbox" id="topmenu">
-          <input type="radio" id="menu1" class="radiobtn" name="menu" value="1" checked onchange="menuToggle()">
+          <input type="radio" id="menu1" class="radiobtn" name="menu" value="1" onchange="menuToggle(1);" checked>
           <label class="rbox" for="menu1"><span>Avoimet kohteet</span></label>
 
-          <input type="radio" id="menu2" class="radiobtn" name="menu" value="2" onchange="menuToggle()">
+          <input type="radio" id="menu2" class="radiobtn" name="menu" value="2" onchange="menuToggle(2);">
           <label class="rbox" for="menu2"><span>Veikkaushistoria</span></label>
         </div>
       </div>
     </header>
+    {% else %}
+    <header>
+      <div id="headercontent" class="maxwidth">
+        <a href="/" class="mainlogo">Fuzerbetlogo</a>
+        <a href="{% provider_login_url "twitch" next="/" %}" class="button">Twitch-login</a>
+      </div>
+    </header>
+    {% endif %}
+
     <div id="mainContent" class="maxwidth">
       <div id="winnermatchescontainer">
+        {% if user.is_authenticated %}
         <h3>Avoimet kohteet:</h3>
         <div id="winnermatches">
         </div>
+        {% else %}
+        <p>Kirjaudu sisään käyttämällä Twitch-tiliäsi: <a href="{% provider_login_url "twitch" next="/" %}" class="button">Twitch</a>
+
+        Kirjautumalla hyväksyt ehdot jnejne</p>
+        {% endif %}
       </div>
-      <div id='bethistorydiv'>
+      <div id="bethistorydiv">
+        {% if user.is_authenticated %}
         <!--<button id="bethistoryaccordion" class="accordion" onclick="toggleAccordion()">Veikkaushistoria</button>
         <div id="winnerbets" class="accordioncontent">-->
         <h3>Veikkaushistoria:</h3>
         <div id="winnerbets">
         </div>
+        {% endif %}
+      </div>
+      <div id="privacydiv">
+        <h3>Yksityisyystietoa</h3>
+        <h4>Evästeet</h4>
+        <p>Sivusto käyttää evästeitä ainoastaan sivuston teknisessä toiminnassa. Emme käytä seuranta- tai markkinointievästeitä. Kirjautumalla sisään hyväksyt evästeiden käytön.
+        </p>
+        <h4>Keräämämme tiedot</h4>
+        <p>Kirjautuessasi sisään Twitch välittää sivustolle käyttäjätietojasi. Tallennamme ainoastaan käyttäjänimesi.</p>
+        <p>Käyttäjänimesi voi näkyä muille käyttäjille ja livelähetyksessä, mikäli olet korkealla pistesijoituksessa. Käyttäjänimeä käytetään palkintojen toimittamiseen Twitch-viestien kautta.
+        </p>
+        <p>Käyttäjätiedot poistetaan kohtuullisen ajan kuluessa kilpailun loputtua.
+        </p>
       </div>
     </div>
+
+    <footer>
+      <div class="maxwidth">
+          <input type="radio" id="menu3" class="radiobtn" name="menu" value="3" onchange="menuToggle(3)">
+          <label class="rbox" for="menu3"><span>Yksityisyystiedot</span></label>
+      </div>
+
+    </footer>
     <script>
       let odds = {};
-
+      {% if user.is_authenticated %}
       $(document).ready(function() {
         updateData();
       });
@@ -278,15 +315,16 @@
           $('#winnerbets').css('height', '1px');
         }
       }
-
-      function menuToggle() {
-        let menu = $("#topmenu input[type='radio']:checked").val();
-        if (menu === "1") {
+      {% endif %}
+      function menuToggle(menu) {
+        //let menu = $("#topmenu input[type='radio']:checked").val();
+        hideScreens();
+        if (menu === 1) {
           $('#winnermatchescontainer').css('display', 'block');
-          $('#bethistorydiv').css('display', 'none');
-        } else {
-          $('#winnermatchescontainer').css('display', 'none');
+        } else if (menu === 2) {
           $('#bethistorydiv').css('display', 'block');
+        } else if (menu === 3) {
+          $('#privacydiv').css('display', 'block');
         }
         window.scroll({
           top: 0,
@@ -294,16 +332,12 @@
           behavior: 'smooth'
         });
       }
+
+      function hideScreens() {
+        $('#bethistorydiv').css('display', 'none');
+        $('#winnermatchescontainer').css('display', 'none');
+        $('#privacydiv').css('display', 'none');
+      }
     </script>
-    {% else %}
-    <header>
-      <div id="headercontent" class="maxwidth">
-        <span class="mainlogo">Fuzerbetlogo</span>
-        <a href="{% provider_login_url "twitch" next="/" %}" class="button">Twitch-login</a>
-      </div>
-    </header>
-    <br /><br />
-    Kirjaudu sisään käyttämällä Twitch-tililläsi: <a href="{% provider_login_url "twitch" next="/" %}" class="button">Twitch</a>
-    {% endif %}
 </body>
 </html>

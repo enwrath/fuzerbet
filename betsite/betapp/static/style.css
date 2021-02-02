@@ -8,6 +8,10 @@ body {
   background-color: #171717;
   color: #b1acac;
   font-size: medium;
+
+  display: flex;
+  min-height: 100vh;
+  flex-direction: column;
 }
 .betdiv {
   background-color: #2d2f40;
@@ -126,6 +130,11 @@ a.button {
   max-width: 600px;
   margin: auto;
 }
+
+#privacydiv {
+  display: none;
+  margin: auto;
+}
 .accordion {
   background-color: #a9b2c5;
   color: #444;
@@ -182,6 +191,7 @@ a.button {
 
 #mainContent {
   margin: auto;
+  flex: 1;
 }
 
 .maxwidth {
@@ -191,6 +201,16 @@ header {
   position: sticky;
   top: 0;
   background-color: #1f2240;
+}
+
+footer {
+  background-color: #1f2240;
+  padding: 0.5em;
+  flex-shrink: 0;
+}
+footer > div {
+  justify-content: space-evenly;
+  margin: auto;
 }
 
 #headercontent {
@@ -216,4 +236,9 @@ header {
   border-radius: 6px;
   color: #000;
   font-weight: bold;
+}
+#allcontainer {
+  display: flex;
+  flex-direction: column;
+  height: 100%;
 }
