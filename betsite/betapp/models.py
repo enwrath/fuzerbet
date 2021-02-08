@@ -4,6 +4,7 @@ from django.contrib.auth.models import User
 class Points(models.Model):
     user = models.ForeignKey(User, on_delete=models.CASCADE)
     points = models.DecimalField(default=100,max_digits=15, decimal_places=2)
+    resets = models.IntegerField(default=0)
     def __str__(self):
         return 'Points {}'.format(self.user.username)
     class Meta:

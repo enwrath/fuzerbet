@@ -128,3 +128,13 @@ def winnerBet(request):
     p.points = float(p.points) - points
     p.save()
     return HttpResponse("Success")
+
+@login_required
+def resetUser(request):
+    p = Points.objects.get_or_create(user=request.user)[0]
+    p.points = 100
+    p.resets = p.resets + 1
+    p.save()
+
+    WinnerBet.objects.filter(user=request.user).delete()
+    return HttpResponse("Success")

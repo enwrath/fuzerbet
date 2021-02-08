@@ -13,4 +13,5 @@ urlpatterns = [
     path('streamUpdate', views.streamUpdate, name='streamUpdate'),
     path('ranking', views.ranking, name='ranking'),
     path('rankingUpdate', views.rankingUpdate, name='rankingUpdate'),
+    path('resetUser', views.resetUser, name='resetUser'),
 ]

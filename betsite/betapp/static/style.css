@@ -135,6 +135,11 @@ a.button {
   display: none;
   margin: auto;
 }
+
+#extrasdiv {
+  display: none;
+  margin: auto;
+}
 .accordion {
   background-color: #a9b2c5;
   color: #444;

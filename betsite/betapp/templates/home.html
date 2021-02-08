@@ -26,6 +26,9 @@
 
           <input type="radio" id="menu2" class="radiobtn" name="menu" value="2" onchange="menuToggle(2);">
           <label class="rbox" for="menu2"><span>Veikkaushistoria</span></label>
+
+          <input type="radio" id="menu4" class="radiobtn" name="menu" value="4" onchange="menuToggle(4);">
+          <label class="rbox" for="menu4"><span>Lisätoiminnot</span></label>
         </div>
       </div>
     </header>
@@ -70,6 +73,15 @@
         </p>
         <p>Käyttäjätiedot poistetaan kohtuullisen ajan kuluessa kilpailun loputtua.
         </p>
+      </div>
+      <div id="extrasdiv">
+        <div class="betdiv">
+          <button class="betbutton" onclick="resetUser()">Aloita alusta</button>
+          <p>
+            Aloita veikkausurasi alusta. Nollaa pisteesi ja vetosi. Huom! Ei peruttavissa.
+          </p>
+        </div>
+
       </div>
     </div>
 
@@ -315,6 +327,12 @@
           $('#winnerbets').css('height', '1px');
         }
       }
+
+      function resetUser() {
+        $.ajax({url: 'resetUser', success: function(result){
+          updateData();
+        }});
+      }
       {% endif %}
       function menuToggle(menu) {
         //let menu = $("#topmenu input[type='radio']:checked").val();
@@ -325,6 +343,8 @@
           $('#bethistorydiv').css('display', 'block');
         } else if (menu === 3) {
           $('#privacydiv').css('display', 'block');
+        } else if (menu === 4) {
+          $('#extrasdiv').css('display', 'block');
         }
         window.scroll({
           top: 0,
@@ -337,6 +357,7 @@
         $('#bethistorydiv').css('display', 'none');
         $('#winnermatchescontainer').css('display', 'none');
         $('#privacydiv').css('display', 'none');
+        $('#extrasdiv').css('display', 'none');
       }
     </script>
 </body>
