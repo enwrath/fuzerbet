@@ -80,7 +80,7 @@ def winnerBet(request):
     winner = int(request.GET.get('winner', '0'))
     result = int(request.GET.get('result', '-1'))
     if match == -1 or points <= 0 or (winner == 0 and result == -1):
-        return HttpResponse("Missing parameters")
+        return JsonResponse({'good': False, 'msg': 'Puuttellinen veikkauspyyntö.'})
     p = Points.objects.get_or_create(user=request.user)[0]
     if points > p.points:
         #just all in
@@ -88,9 +88,9 @@ def winnerBet(request):
     try:
         match = WinnerMatch.objects.get(pk=match)
     except ObjectDoesNotExist:
-        return HttpResponse("No such match")
+        return JsonResponse({'good': False, 'msg': 'Veikkauskohdetta ei löytynyt.'})
     if match.canBet == False:
-        return HttpResponse("Closed")
+        return JsonResponse({'good': False, 'msg': 'Veikkauskohde on jo sulkeutunut.'})
     pointsWin = points * float(match.player1odds)
     if winner == 2: pointsWin = points * float(match.player2odds)
 
@@ -127,7 +127,7 @@ def winnerBet(request):
     bet.save()
     p.points = float(p.points) - points
     p.save()
-    return HttpResponse("Success")
+    return JsonResponse({'good': True, 'msg': 'Veto rekisteröity.'})
 
 @login_required
 def resetUser(request):
@@ -137,4 +137,4 @@ def resetUser(request):
     p.save()
 
     WinnerBet.objects.filter(user=request.user).delete()
-    return HttpResponse("Success")
+    return JsonResponse({'good': True, 'msg': 'Pisteet ja vedot nollattu.'})

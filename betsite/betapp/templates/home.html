@@ -42,10 +42,10 @@
     {% endif %}
 
     <div id="mainContent" class="maxwidth">
+      <div id="msgDiv">
+      </div>
       <div id="winnermatchescontainer">
         {% if user.is_authenticated %}
-        <div id="msgDiv">
-        </div>
         <h3>Avoimet kohteet:</h3>
         <div id="winnermatches">
         </div>
@@ -121,6 +121,7 @@
         let points = $('#points-'+match).val();
         $.ajax({url: `winnerBet?match=${match}&winner=${winner}&points=${points}`, success: function(result){
           updateData();
+          addMessage(result.good, result.msg);
         }});
       }
 
@@ -129,6 +130,7 @@
         let points = $('#points2-'+match).val();
         $.ajax({url: `winnerBet?match=${match}&result=${winner}&points=${points}`, success: function(result){
           updateData();
+          addMessage(result.good, result.msg);
         }});
       }
 
@@ -336,6 +338,7 @@
       function resetUser() {
         $.ajax({url: 'resetUser', success: function(result){
           updateData();
+          addMessage(result.good, result.msg);
         }});
       }
 
