@@ -112,6 +112,9 @@ hr {
 .betbutton:hover {
   background-color: #5c8034;
 }
+.betbutton:disabled {
+  background-color: #de5151;
+}
 a.button {
   text-decoration: none;
   padding: 0.5em 1em;
