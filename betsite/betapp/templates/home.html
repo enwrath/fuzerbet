@@ -44,6 +44,8 @@
     <div id="mainContent" class="maxwidth">
       <div id="winnermatchescontainer">
         {% if user.is_authenticated %}
+        <div id="msgDiv">
+        </div>
         <h3>Avoimet kohteet:</h3>
         <div id="winnermatches">
         </div>
@@ -340,6 +342,18 @@
       function toggleResetButton() {
         if ($("#resetCheck").is(':checked')) $("#resetButton").removeAttr("disabled");
         else $("#resetButton").attr("disabled", true);
+      }
+
+      function addMessage(good, text) {
+        const goodbad = good ? "msgGood" : "msgBad";
+        const msg = $(`<div class="${goodbad}">
+          <span class="closebtn" onclick="this.parentElement.remove();">&times;</span>
+          <span>${text}</span>
+        </div>`);
+        $("#msgDiv").prepend(msg);
+        setTimeout(function() {
+          msg.remove();
+        }, 10000);
       }
       {% endif %}
       function menuToggle(menu) {

@@ -250,3 +250,34 @@ footer > div {
   flex-direction: column;
   height: 100%;
 }
+.msgGood {
+  padding: 1em;
+  color: white;
+  background-color: #2b7f16;
+  margin-bottom: 1em;
+}
+.msgBad {
+  padding: 1em;
+  color: white;
+  background-color: #bf382e;
+  margin-bottom: 1em;
+}
+.closebtn {
+  margin-left: 15px;
+  color: white;
+  font-weight: bold;
+  float: right;
+  font-size: 22px;
+  line-height: 20px;
+  cursor: pointer;
+  transition: 0.3s;
+}
+.closebtn:hover {
+  color: black;
+}
+#msgDiv {
+  z-index: 50;
+  position: absolute;
+  right: 1em;
+  bottom: 1em;
+}
