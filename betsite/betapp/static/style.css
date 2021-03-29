@@ -277,7 +277,7 @@ footer > div {
 }
 #msgDiv {
   z-index: 50;
-  position: absolute;
+  position: fixed;
   right: 1em;
   bottom: 1em;
 }
