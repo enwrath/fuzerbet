@@ -27,6 +27,9 @@
           <input type="radio" id="menu2" class="radiobtn" name="menu" value="2" onchange="menuToggle(2);">
           <label class="rbox" for="menu2"><span>Veikkaushistoria</span></label>
 
+          <input type="radio" id="menu5" class="radiobtn" name="menu" value="5" onchange="menuToggle(5);">
+          <label class="rbox" for="menu5"><span>Pistetilastot</span></label>
+
           <input type="radio" id="menu4" class="radiobtn" name="menu" value="4" onchange="menuToggle(4);">
           <label class="rbox" for="menu4"><span>Lisätoiminnot</span></label>
         </div>
@@ -86,6 +89,9 @@
         </div>
 
       </div>
+      <div id="rankingdiv">
+        Ladataan tietoja...
+      </div>
     </div>
 
     <footer>
@@ -97,6 +103,8 @@
     </footer>
     <script>
       let odds = {};
+      let username = "{{ user.username }}";
+      console.log(username)
       {% if user.is_authenticated %}
       $(document).ready(function() {
         updateData();
@@ -105,6 +113,9 @@
         $.ajax({url: "userUpdate", success: function(result){
           handleData(result);
         }});
+        $.ajax({url: "rankingUpdate", success: function(result){
+          updateRankings(result);
+        }});
       }
 
       function handleData(data) {
@@ -112,6 +123,19 @@
           createWinnerMatches(data.winnermatches);
           createWinnerMatchBets(data.winnerbets);
           $(".wagerinput").attr({"max": data.points});
+      }
+
+      function updateRankings(data) {
+        $('#rankingdiv').empty();
+        for (let i = 0; i < data.rankings.length; i++) {
+          if (data.rankings[i].name === username) {
+            const row = $(`<span class="highlightrow">${i+1}. ${data.rankings[i].name} - ${data.rankings[i].points} pistettä</span><br />`);
+            $("#rankingdiv").append(row);
+          } else {
+            const row = $(`<span>${i+1}. ${data.rankings[i].name} - ${data.rankings[i].points} pistettä</span><br />`);
+            $("#rankingdiv").append(row);
+          }
+        }
       }
 
       function winnerBet(match) {
@@ -368,6 +392,8 @@
           $('#privacydiv').css('display', 'block');
         } else if (menu === 4) {
           $('#extrasdiv').css('display', 'block');
+        } else if (menu === 5) {
+          $('#rankingdiv').css('display', 'block');
         }
         window.scroll({
           top: 0,
@@ -381,6 +407,7 @@
         $('#winnermatchescontainer').css('display', 'none');
         $('#privacydiv').css('display', 'none');
         $('#extrasdiv').css('display', 'none');
+        $('rankingdiv').css('display', 'none');
       }
     </script>
 </body>

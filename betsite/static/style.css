@@ -143,6 +143,12 @@ a.button {
   display: none;
   margin: auto;
 }
+#rankingdiv {
+  display: none;
+  margin: auto;
+  text-align: left;
+  font-size: large;
+}
 .accordion {
   background-color: #a9b2c5;
   color: #444;
@@ -280,4 +286,7 @@ footer > div {
   position: fixed;
   right: 1em;
   bottom: 1em;
+}
+.highlightrow {
+  background: #71704a;
 }
