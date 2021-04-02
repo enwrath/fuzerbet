@@ -35,6 +35,9 @@ body {
   .betdiv {
     width: 600px;
   }
+  #rankingdiv {
+    min-width: 600px;
+  }
 }
 .bettitle {
   text-align: left;
@@ -148,6 +151,7 @@ a.button {
   margin: auto;
   text-align: left;
   font-size: large;
+  width: 90%;
 }
 .accordion {
   background-color: #a9b2c5;
@@ -288,5 +292,15 @@ footer > div {
   bottom: 1em;
 }
 .highlightrow {
-  background: #71704a;
+  background: #59597d !important;
+}
+.ranknumber {
+  font-size: x-large;
+}
+.ranklistdiv {
+  display: flex;
+  justify-content: space-around;
+  margin-top: 0.25em;
+  border-bottom: solid;
+  background: #1f2240;
 }

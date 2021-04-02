@@ -129,11 +129,11 @@
         $('#rankingdiv').empty();
         for (let i = 0; i < data.rankings.length; i++) {
           if (data.rankings[i].name === username) {
-            const row = $(`<span class="highlightrow">${i+1}. ${data.rankings[i].name} - ${data.rankings[i].points} pistettä</span><br />`);
-            $("#rankingdiv").append(row);
+            const row = $(`<div class="ranklistdiv highlightrow"><span class="ranknumber">${i+1}</span><span>${data.rankings[i].name}</span><span>${data.rankings[i].points} pistettä</span></div>`);
+            $('#rankingdiv').append(row);
           } else {
-            const row = $(`<span>${i+1}. ${data.rankings[i].name} - ${data.rankings[i].points} pistettä</span><br />`);
-            $("#rankingdiv").append(row);
+            const row = $(`<div class="ranklistdiv"><span class="ranknumber">${i+1}</span><span>${data.rankings[i].name}</span><span>${data.rankings[i].points} pistettä</span></div>`);
+            $('#rankingdiv').append(row);
           }
         }
       }
