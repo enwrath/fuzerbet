@@ -83,8 +83,12 @@ def winnerBet(request):
         return JsonResponse({'good': False, 'msg': 'Puuttellinen veikkauspyyntö.'})
     p = Points.objects.get_or_create(user=request.user)[0]
     if points > p.points:
-        #just all in
-        points = float(p.points)
+        #Pyöristetään jos on näin lähellä
+        #Desimaalit, never again
+        if (points - float(p.points) < 0.02):
+            points = float(p.points)
+        else:
+            return JsonResponse({'good': False, 'msg': 'Ei riittävästi pisteitä.'})
     try:
         match = WinnerMatch.objects.get(pk=match)
     except ObjectDoesNotExist:
