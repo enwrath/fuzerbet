@@ -6,37 +6,26 @@
     <meta http-equiv="X-UA-Compatible" content="ie=edge">
     <title>Fuzer bet</title>
     <style>
-      tr:nth-child(odd) {
-        background-color: #918fc3;
-      }
-      table {
-        background-color: #b4b2e0;
-      }
-      th {
-        text-align: center;
-      }
-      td {
-        text-align: center;
-      }
       body {
-        font-size: large;
+        font-size: x-large;
+        width: 600px;
+        color: #b1acac;
+      }
+      .ranklistdiv {
+        display: flex;
+        justify-content: space-between;
+        padding-left: 1em;
+        padding-right: 1em;
+        border-bottom: solid;
+        background: #1f2240;
       }
 		</style>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.5.1/jquery.min.js" integrity="sha512-bLT0Qm9VnAYZDflyKcBaQ2gg0hSYNQrJ8RilYldYQ1FxQYoCLtUjuuRuZo+fjqhx/qtq/1itJ0C2ejDxltZVFg==" crossorigin="anonymous"></script>
 </head>
 <body onload="updateData()">
-  <table>
-  <colgroup>
-    <col style="width:48px">
-    <col style="width:120px">
-    <col style="width:240px">
-  </colgroup>
-    <tr>
-      <th>#</th>
-      <th>Pisteet</th>
-      <th>Nimi</th>
-    </tr>
-  </table>
+  <div id="rankdiv">
+
+  </div>
 
   <script>
 
@@ -47,12 +36,11 @@
     }
 
     function handleData(data) {
-      $('tr').slice(1).remove();
-      for (value in data.rankings) {
-        const row = $(`<tr>
-          <td>${parseInt(value)+1}</td><td>${data.rankings[value].points}</td><td>${data.rankings[value].name}</td>
-          </tr>`);
-        $("table").append(row);
+      $('#rankdiv').empty();
+      console.log(data)
+      for (let i = 0; i < data.rankings.length; i++) {
+        const row = $(`<div class="ranklistdiv"><span class="ranknumber">${i+1}</span><span>${data.rankings[i].name}</span><span>${data.rankings[i].points} pistettä</span></div>`);
+        $('#rankdiv').append(row);
       }
     }
   </script>

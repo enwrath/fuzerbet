@@ -299,7 +299,9 @@ footer > div {
 }
 .ranklistdiv {
   display: flex;
-  justify-content: space-around;
+  justify-content: space-between;
+  padding-left: 1em;
+  padding-right: 1em;
   margin-top: 0.25em;
   border-bottom: solid;
   background: #1f2240;
