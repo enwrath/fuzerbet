@@ -4,7 +4,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta http-equiv="X-UA-Compatible" content="ie=edge">
-    <title>Fuzer bet beta v0.000001.1.0001</title>
+    <title>Fuzerbet</title>
     {% load static %}
 
     <link rel="stylesheet" type="text/css" href="{% static 'style.css' %}">
@@ -16,7 +16,7 @@
     {% if user.is_authenticated %}
     <header>
       <div id="headercontent" class="maxwidth">
-        <a href="/" class="mainlogo">Fuzerbetlogo</a>
+        <a href="/" class="mainlogo">Fuzerbet</a>
         <span>Pisteet: <span id="points"></span></span>
       </div>
       <div id="headernavigation" class="maxwidth">
@@ -38,7 +38,7 @@
     {% else %}
     <header>
       <div id="headercontent" class="maxwidth">
-        <a href="/" class="mainlogo">Fuzerbetlogo</a>
+        <a href="/" class="mainlogo">Fuzerbet</a>
         <a href="{% provider_login_url "twitch" next="/" %}" class="button">Twitch-login</a>
       </div>
     </header>
