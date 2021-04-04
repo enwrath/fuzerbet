@@ -306,3 +306,8 @@ footer > div {
 .betsubdiv {
   width: 45%;
 }
+#custommatches {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
