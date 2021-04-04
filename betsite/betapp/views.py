@@ -17,6 +17,7 @@ def userUpdate(request):
     data['winnermatches'] = list(WinnerMatch.objects.filter(canBet=True).values())
     data['custommatches'] = list(CustomMatch.objects.filter(canBet=True).values())
     winnerbets = WinnerBet.objects.filter(user=request.user)
+    custombets = CustomBet.objects.filter(user=request.user)
     wbets = []
     for bet in winnerbets:
         b = {}
@@ -38,7 +39,27 @@ def userUpdate(request):
         b['resultBet'] = bet.resultBet
         b['bestof'] = match.bestof
         wbets.append(b)
+    cbets = []
+    for bet in custombets:
+        b = {}
+        try:
+            match = CustomMatch.objects.get(pk=bet.match.pk)
+        except ObjectDoesNotExist:
+            continue
+            print("bet exists on non-existent match?????")
+        b['player1'] = match.player1
+        b['player2'] = match.player2
+        b['points'] = bet.points
+        b['guess'] = bet.winner
+        b['winner'] = match.winner
+        b['resolved'] = bet.resolved
+        b['payout'] = bet.payout
+        b['title'] = match.title
+        b['won'] = bet.won
+        cbets.append(b)
+
     data['winnerbets'] = wbets
+    data['custombets'] = cbets
     return JsonResponse(data)
 
 

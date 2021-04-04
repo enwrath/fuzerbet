@@ -62,8 +62,15 @@
         {% if user.is_authenticated %}
         <!--<button id="bethistoryaccordion" class="accordion" onclick="toggleAccordion()">Veikkaushistoria</button>
         <div id="winnerbets" class="accordioncontent">-->
-        <h3>Veikkaushistoria:</h3>
-        <div id="winnerbets">
+        <div class="bettitlediv">
+          <div class="betsubdiv">
+          <h3>Tulosveikkaukset:</h3>
+          <div id="winnerbets">
+          </div></div>
+          <div class="betsubdiv">
+          <h3>Muut veikkaukset:</h3>
+          <div id="custombets">
+          </div></div>
         </div>
         {% endif %}
       </div>
@@ -125,8 +132,7 @@
           createWinnerMatchBets(data.winnerbets);
           createCustomMatches(data.custommatches);
           $(".wagerinput").attr({"max": data.points});
-
-          //createWinnerMatchBets(data.winnerbets);
+          createCustomMatchBets(data.custombets);
       }
 
       function updateRankings(data) {
@@ -408,6 +414,35 @@
         $('#custommatches').children('div').each(function () {
             if (!cmatches.includes(parseInt(this.id.split('-')[1]))) this.remove();
         });
+      }
+
+      function createCustomMatchBets(bets) {
+        $('#custombets').empty();
+        for (const b in bets) {
+          const bet = bets[b];
+          let tila = 'Odottaa tulosta';
+          let color = 'betgray';
+          if (bet.resolved) {
+            color = bet.won ? 'betgreen' : 'betred';
+            tila = bet.won ? 'Voitto' : 'Tappio';
+          }
+          let resultguess = bet.player1;
+          if (bet.guess === 2) resultguess = bet.player2;
+
+          const betdiv = $(`<div class="betdiv2"><div>
+          <span class="betstatus ${color}">●</span>
+          <p class="bettitle">${bet.title}<br />
+          ${bet.player1} - ${bet.player2}</p>
+
+          <hr />
+          <p class="bettitle">
+          Tila: ${tila} <br />
+          Veikkaus: <span class="bettedplayer">${resultguess}</span> <br />
+          Voittosumma: <span class="bettedplayer">${bet.payout}</span></p>
+          </div>`);
+
+          $("#custombets").prepend(betdiv);
+        }
       }
 
       function toggleAccordion() {

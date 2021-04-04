@@ -32,10 +32,7 @@ body {
   border-radius: 10px;
 }
 @media only screen and (min-width: 768px) {
-  .betdiv {
-    width: 600px;
-  }
-  #rankingdiv {
+  .maxwidth {
     min-width: 600px;
   }
 }
@@ -305,4 +302,7 @@ footer > div {
   margin-top: 0.25em;
   border-bottom: solid;
   background: #1f2240;
+}
+.betsubdiv {
+  width: 45%;
 }
