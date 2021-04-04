@@ -104,7 +104,6 @@
     <script>
       let odds = {};
       let username = "{{ user.username }}";
-      console.log(username)
       {% if user.is_authenticated %}
       $(document).ready(function() {
         updateData();
