@@ -28,6 +28,7 @@
   </div>
 
   <script>
+    var intervalID = window.setInterval(updateData, 8000);
 
     function updateData() {
       $.ajax({url: "rankingUpdate", success: function(result){
@@ -37,7 +38,6 @@
 
     function handleData(data) {
       $('#rankdiv').empty();
-      console.log(data)
       for (let i = 0; i < data.rankings.length; i++) {
         const row = $(`<div class="ranklistdiv"><span class="ranknumber">${i+1}</span><span>${data.rankings[i].name}</span><span>${data.rankings[i].points} pistettä</span></div>`);
         $('#rankdiv').append(row);
