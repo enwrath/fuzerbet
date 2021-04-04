@@ -79,12 +79,6 @@ class WinnerMatch(models.Model):
 
                     bet.save()
                 self.canBet = False
-        else:
-            #When new match is added, users get bumped to 100 points if they have less
-            lowpoints =  Points.objects.filter(points__lt=100)
-            for p in lowpoints:
-                p.points = 100
-                p.save()
 
         #prooooobably want to check that winchance is 1-99.
         #But surely admins know what they are doing!
