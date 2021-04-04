@@ -10,6 +10,38 @@ class Points(models.Model):
     class Meta:
         verbose_name_plural = "Points"
 
+class CustomMatch(models.Model):
+    title = models.CharField(max_length=200, verbose_name='Question (e.g. Is next game cannon rush)')
+    player1 = models.CharField(max_length=200, verbose_name='Result 1 (e.g. Yes)')
+    player2 = models.CharField(max_length=200, verbose_name='Result 2 (e.g. No)')
+    player1winchance = models.IntegerField(default=50, verbose_name='Result 1 probability (%)')
+    player2winchance = models.IntegerField(default=50, verbose_name='Result 2 probability (%)')
+    player1odds = models.DecimalField(default=2,max_digits=11, decimal_places=2)
+    player2odds = models.DecimalField(default=2,max_digits=11, decimal_places=2)
+    canBet = models.BooleanField(default=True)
+    winner = models.IntegerField(choices=[(0,'No result'),(1,'Result 1'),(2,'Result 2')], default=0)
+
+    def save(self,*args,**kwargs):
+        old = CustomMatch.objects.filter(pk=self.pk).first()
+        if old:
+            if old.winner!=self.winner:
+                for bet in CustomBet.objects.filter(match=self.pk).filter(resolved=False):
+                    bet.resolved = True
+                    if bet.winner == self.winner:
+                        p = Points.objects.get(user=bet.user)
+                        p.points += bet.payout
+                        p.save()
+                        bet.won = True
+
+                    bet.save()
+                self.canBet = False
+
+
+        self.player1odds = round(1/(self.player1winchance/100), 2)
+        self.player2odds = round(1/(self.player2winchance/100), 2)
+
+        super(CustomMatch,self).save(*args,**kwargs)
+
 class WinnerMatch(models.Model):
     title = models.CharField(max_length=200)
     player1 = models.CharField(max_length=200)
@@ -124,3 +156,14 @@ class WinnerBet(models.Model):
     won = models.BooleanField(default=False)
     def __str__(self):
         return '{} bet on {}: {} vs {}'.format(self.user.username, self.match.title, self.match.player1, self.match.player2)
+
+class CustomBet(models.Model):
+    user = models.ForeignKey(User, on_delete=models.CASCADE)
+    match = models.ForeignKey(CustomMatch, on_delete=models.CASCADE)
+    points = models.DecimalField(default=0,max_digits=15, decimal_places=2)
+    payout = models.DecimalField(default=0,max_digits=15, decimal_places=2)
+    winner = models.IntegerField(default=0)
+    resolved = models.BooleanField(default=False)
+    won = models.BooleanField(default=False)
+    def __str__(self):
+        return '{} bet on {}'.format(self.user.username, self.match.title)

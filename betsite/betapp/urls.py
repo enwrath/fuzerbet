@@ -7,6 +7,7 @@ urlpatterns = [
     path('', views.index, name='index'),
     url(r'^accounts/', include('allauth.urls')),
     path('winnerBet', views.winnerBet, name='winnerBet'),
+    path('customBet', views.customBet, name='customBet'),
     path('userUpdate', views.userUpdate, name='userUpdate'),
     path('stream', views.streamView, name='streamView'),
     path('stream2', views.streamView2, name='streamView2'),

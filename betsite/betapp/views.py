@@ -1,6 +1,6 @@
 from django.http import HttpResponse, JsonResponse
 from django.shortcuts import render
-from betapp.models import Points, WinnerMatch, WinnerBet
+from betapp.models import Points, WinnerMatch, WinnerBet, CustomMatch, CustomBet
 from django.contrib.auth.decorators import login_required
 from django.core.exceptions import ObjectDoesNotExist
 
@@ -15,6 +15,7 @@ def userUpdate(request):
     data = {}
     data['points'] = Points.objects.get_or_create(user=request.user)[0].points
     data['winnermatches'] = list(WinnerMatch.objects.filter(canBet=True).values())
+    data['custommatches'] = list(CustomMatch.objects.filter(canBet=True).values())
     winnerbets = WinnerBet.objects.filter(user=request.user)
     wbets = []
     for bet in winnerbets:
@@ -127,6 +128,37 @@ def winnerBet(request):
         bet = WinnerBet(match=match, user=request.user, points=points, payout=pointsWin, winner=w, result=result, resultBet=True)
     else:
         bet = WinnerBet(match=match, user=request.user, points=points, payout=pointsWin, winner=winner, resultBet=False)
+
+    bet.save()
+    p.points = float(p.points) - points
+    p.save()
+    return JsonResponse({'good': True, 'msg': 'Veto rekisteröity.'})
+
+@login_required
+def customBet(request):
+    points = float(request.GET.get('points', '0'))
+    match = int(request.GET.get('match', '-1'))
+    winner = int(request.GET.get('winner', '0'))
+    if match == -1 or points <= 0 or winner == 0:
+        return JsonResponse({'good': False, 'msg': 'Puuttellinen veikkauspyyntö.'})
+    p = Points.objects.get_or_create(user=request.user)[0]
+    if points > p.points:
+        #Pyöristetään jos on näin lähellä
+        #Desimaalit, never again
+        if (points - float(p.points) < 0.02):
+            points = float(p.points)
+        else:
+            return JsonResponse({'good': False, 'msg': 'Ei riittävästi pisteitä.'})
+    try:
+        match = CustomMatch.objects.get(pk=match)
+    except ObjectDoesNotExist:
+        return JsonResponse({'good': False, 'msg': 'Veikkauskohdetta ei löytynyt.'})
+    if match.canBet == False:
+        return JsonResponse({'good': False, 'msg': 'Veikkauskohde on jo sulkeutunut.'})
+    pointsWin = points * float(match.player1odds)
+    if winner == 2: pointsWin = points * float(match.player2odds)
+
+    bet = CustomBet(match=match, user=request.user, points=points, payout=pointsWin, winner=winner)
 
     bet.save()
     p.points = float(p.points) - points

@@ -52,6 +52,8 @@
         <h3>Avoimet kohteet:</h3>
         <div id="winnermatches">
         </div>
+        <div id="custommatches">
+        </div>
         {% else %}
         <p>Kirjaudu sisään käyttämällä Twitch-tiliäsi:<br /><br /> <a href="{% provider_login_url "twitch" next="/" %}" class="button">Twitch</a>
         {% endif %}
@@ -121,7 +123,10 @@
           $("#points").text(data.points);
           createWinnerMatches(data.winnermatches);
           createWinnerMatchBets(data.winnerbets);
+          createCustomMatches(data.custommatches);
           $(".wagerinput").attr({"max": data.points});
+
+          //createWinnerMatchBets(data.winnerbets);
       }
 
       function updateRankings(data) {
@@ -155,6 +160,15 @@
         }});
       }
 
+      function customBet(match) {
+        let winner = $("#1radioc-"+match+" input[type='radio']:checked").val();
+        let points = $('#pointsc-'+match).val();
+        $.ajax({url: `customBet?match=${match}&winner=${winner}&points=${points}`, success: function(result){
+          updateData();
+          addMessage(result.good, result.msg);
+        }});
+      }
+
       function updateWinnerBet(match) {
         let winner = parseInt($("#1radio-"+match+" input[type='radio']:checked").val()) - 1;
         let points = parseFloat($('#points-'+match).val());
@@ -183,6 +197,21 @@
           $('#points2-'+match).val(0.00);
         }
         $('#payout2-'+match).val((odds[`b-${match}`][winner]*points).toFixed(2));
+      }
+
+      function updateCustomBet(match) {
+        let winner = parseInt($("#1radioc-"+match+" input[type='radio']:checked").val()) - 1;
+        let points = parseFloat($('#pointsc-'+match).val());
+        let max = parseFloat($('#pointsc-'+match).attr('max'));
+        if (points > max) {
+          points = max;
+          $('#pointsc-'+match).val(max);
+        }
+        if (points < 0) {
+          points = 0.00;
+          $('#pointsc-'+match).val(0.00);
+        }
+        $('#payoutc-'+match).val((odds[match][winner]*points).toFixed(2));
       }
 
       function createWinnerMatches(matches) {
@@ -341,6 +370,44 @@
 
           $("#winnerbets").prepend(betdiv);
         }
+      }
+
+      function createCustomMatches(matches) {
+        let cmatches = []
+        for (const m in matches) {
+          const match = matches[m];
+          cmatches.push(match.id);
+          if ($('#winbetdivcustom-'+match.id).length) {
+            continue
+          }
+          odds[match.id] = [parseFloat(match.player1odds), parseFloat(match.player2odds)];
+          let betdiv = $(`<div class="betdiv" onchange="updateCustomBet(${match.id})" id="winbetdivcustom-${match.id}">
+            <p class="bettitle">${match.title}</p>
+            <hr />
+            <div class="fbox" id="1radioc-${match.id}">
+              <input type="radio" id="radioc-${match.id}-1" class="radiobtn" name="radioc-${match.id}" value="1" checked>
+              <label class="rbox" for="radioc-${match.id}-1"><span>${match.player1} (${match.player1odds})</span></label>
+
+              <input type="radio" id="radioc-${match.id}-2" class="radiobtn" name="radioc-${match.id}" value="2">
+              <label class="rbox" for="radioc-${match.id}-2"><span>${match.player2} (${match.player2odds})</span></label>
+
+            </div>
+            <div class="fbox">
+              <div class="wagerdiv">
+                <label class="wagerlabel" for="pointsc-${match.id}">Veto:</label><input type="number" class="wagerinput" id="pointsc-${match.id}" value="1.00" min="0" step="0.01" />
+              </div>
+              <div class="wagerdiv">
+                <label class="wagerlabel" for="payoutc-${match.id}">Voitto:</label><input type="number" class="wagerinput" id="payoutc-${match.id}" value="1.00" disabled />
+              </div>
+            </div>
+            <button class="betbutton" onclick="customBet(${match.id})">Aseta veto</button>
+          </div>`);
+          $("#custommatches").append(betdiv);
+          updateCustomBet(match.id);
+        }
+        $('#custommatches').children('div').each(function () {
+            if (!cmatches.includes(parseInt(this.id.split('-')[1]))) this.remove();
+        });
       }
 
       function toggleAccordion() {
