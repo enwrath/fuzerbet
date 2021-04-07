@@ -22,7 +22,7 @@
 	</div>
   <script>
     var intervalID = window.setInterval(updateData, 3000);
-    var oldData = "";
+    var oldData = "TestiTeksti<br />Tähän tulee max 10 eniten voittanutta<br />Näkyy 6sekuntia!";
 
     function updateData() {
       $.ajax({url: "bigWinUpdate", success: function(result){
@@ -37,7 +37,7 @@
         console.log("restart animation!")
         $('#container').append(row);
         $('#container').fadeIn(300, function() {
-          $('#container').fadeOut(4000);
+          $('#container').fadeOut(6000);
         });
         oldData = data.wins
       }
