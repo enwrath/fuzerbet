@@ -1,6 +1,6 @@
 from django.http import HttpResponse, JsonResponse
 from django.shortcuts import render
-from betapp.models import Points, WinnerMatch, WinnerBet, CustomMatch, CustomBet
+from betapp.models import Points, WinnerMatch, WinnerBet, CustomMatch, CustomBet, MiscData
 from django.contrib.auth.decorators import login_required
 from django.core.exceptions import ObjectDoesNotExist
 
@@ -69,6 +69,9 @@ def streamView(request):
 def streamView2(request):
     return render(request, "stream2.html")
 
+def streamView3(request):
+    return render(request, "stream3.html")
+
 def streamUpdate(request):
     data = {}
     match = WinnerMatch.objects.latest('id')
@@ -94,6 +97,10 @@ def rankingUpdate(request):
     for po in p:
         rankings.append({'name': po.user.username, 'points': po.points})
     return JsonResponse({'rankings': rankings})
+
+def bigWinUpdate(request):
+    miscdata = MiscData.objects.get_or_create(name="bigwins")[0]
+    return JsonResponse({'wins': miscdata.data})
 
 @login_required
 def winnerBet(request):

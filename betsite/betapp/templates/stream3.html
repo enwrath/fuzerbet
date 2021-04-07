@@ -1,0 +1,48 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Fuzer bet</title>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.5.1/jquery.min.js" integrity="sha512-bLT0Qm9VnAYZDflyKcBaQ2gg0hSYNQrJ8RilYldYQ1FxQYoCLtUjuuRuZo+fjqhx/qtq/1itJ0C2ejDxltZVFg==" crossorigin="anonymous"></script>
+
+    <style>
+    .prettytext {
+      font-size: 16px;
+      font-weight: bold;
+      text-shadow: 0 0 2px black, 0 0 2px black, 0 0 2px black, 0 0 2px black;
+      color: white;
+    }
+		</style>
+
+</head>
+<body onload="updateData()">
+  <div id="container" class="prettytext">moimoi
+	</div>
+  <script>
+    var intervalID = window.setInterval(updateData, 3000);
+    var oldData = "";
+
+    function updateData() {
+      $.ajax({url: "bigWinUpdate", success: function(result){
+        handleData(result);
+      }});
+    }
+
+    function handleData(data) {
+      if (oldData !== data.wins) {
+        $("#container").empty();
+        const row = $(`<p>${data.wins}</p>`);
+        console.log("restart animation!")
+        $('#container').append(row);
+        $('#container').fadeIn(300, function() {
+          $('#container').fadeOut(4000);
+        });
+        oldData = data.wins
+      }
+    }
+
+  </script>
+</body>
+</html>

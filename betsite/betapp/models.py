@@ -1,6 +1,10 @@
 from django.db import models
 from django.contrib.auth.models import User
 
+class MiscData(models.Model):
+    data = models.TextField(default="")
+    name = models.CharField(max_length=200)
+
 class Points(models.Model):
     user = models.ForeignKey(User, on_delete=models.CASCADE)
     points = models.DecimalField(default=100,max_digits=15, decimal_places=2)
@@ -25,16 +29,32 @@ class CustomMatch(models.Model):
         old = CustomMatch.objects.filter(pk=self.pk).first()
         if old:
             if old.winner!=self.winner:
+                winners = {}
                 for bet in CustomBet.objects.filter(match=self.pk).filter(resolved=False):
                     bet.resolved = True
                     if bet.winner == self.winner:
                         p = Points.objects.get(user=bet.user)
                         p.points += bet.payout
                         p.save()
+                        winners[p.user.username] = winners.get(p.user.username, 0) + float(bet.payout);
                         bet.won = True
 
                     bet.save()
                 self.canBet = False
+
+                if len(winners) > 0:
+                    biggestwinners = "{}<br />".format(self.title, self.player1, self.player2)
+                    winnerssorted = sorted(winners.items(), key=lambda x: x[1], reverse=True)
+                    index = 0
+                    for i in winnerssorted:
+                        biggestwinners = "{}{} +{}<br />".format(biggestwinners,i[0],i[1])
+                        index += 1
+                        # Print at most 10 topwinners
+                        if index > 10:
+                            break
+                    miscdata = MiscData.objects.get_or_create(name="bigwins")[0]
+                    miscdata.data = biggestwinners
+                    miscdata.save()
 
 
         self.player1odds = round(1/(self.player1winchance/100), 2)
@@ -77,6 +97,7 @@ class WinnerMatch(models.Model):
         old = WinnerMatch.objects.filter(pk=self.pk).first()
         if old:
             if old.winner!=self.winner:
+                winners = {}
                 for bet in WinnerBet.objects.filter(match=self.pk).filter(resolved=False):
                     bet.resolved = True
                     won = False
@@ -106,11 +127,27 @@ class WinnerMatch(models.Model):
                     if won:
                         p = Points.objects.get(user=bet.user)
                         p.points += bet.payout
+                        winners[p.user.username] = winners.get(p.user.username, 0) + float(bet.payout);
                         p.save()
                         bet.won = True
 
                     bet.save()
+
                 self.canBet = False
+
+                if len(winners) > 0:
+                    biggestwinners = "{} - {} vs {}<br />".format(self.title, self.player1, self.player2)
+                    winnerssorted = sorted(winners.items(), key=lambda x: x[1], reverse=True)
+                    index = 0
+                    for i in winnerssorted:
+                        biggestwinners = "{}{} +{}<br />".format(biggestwinners,i[0],i[1])
+                        index += 1
+                        # Print at most 10 topwinners
+                        if index > 10:
+                            break
+                    miscdata = MiscData.objects.get_or_create(name="bigwins")[0]
+                    miscdata.data = biggestwinners
+                    miscdata.save()
 
         #prooooobably want to check that winchance is 1-99.
         #But surely admins know what they are doing!
