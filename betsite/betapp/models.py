@@ -25,6 +25,17 @@ class CustomMatch(models.Model):
     canBet = models.BooleanField(default=True)
     winner = models.IntegerField(choices=[(0,'No result'),(1,'Result 1'),(2,'Result 2')], default=0)
 
+    def __str__(self):
+        betopen = 'Closed'
+        winnerset = 'No result set '
+        if self.canBet:
+            betopen = 'Open'
+        if self.winner != 0:
+            winnerset = 'Result set '
+        return '{} & {}: {}'.format(betopen, winnerset, self.title)
+    class Meta:
+        verbose_name_plural = "Custom Matches"
+
     def save(self,*args,**kwargs):
         old = CustomMatch.objects.filter(pk=self.pk).first()
         if old:
