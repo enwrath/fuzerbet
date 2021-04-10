@@ -124,6 +124,17 @@ def winnerBet(request):
         return JsonResponse({'good': False, 'msg': 'Veikkauskohdetta ei löytynyt.'})
     if match.canBet == False:
         return JsonResponse({'good': False, 'msg': 'Veikkauskohde on jo sulkeutunut.'})
+
+    newBet = False
+    try:
+        isResultBet = result != -1
+        if (isResultBet):
+            oldbet = WinnerBet.objects.get(user=request.user, match=match, resultBet=isResultBet, result=result)
+        else:
+            oldbet = WinnerBet.objects.get(user=request.user, match=match, resultBet=isResultBet, winner=winner)
+    except ObjectDoesNotExist:
+        newBet = True
+
     pointsWin = points * float(match.player1odds)
     if winner == 2: pointsWin = points * float(match.player2odds)
 
@@ -153,11 +164,23 @@ def winnerBet(request):
             if result == 6: pointsWin = points * float(match.resL1)
             if result == 7: pointsWin = points * float(match.resL0)
             if result > 3: w = 2
-        bet = WinnerBet(match=match, user=request.user, points=points, payout=pointsWin, winner=w, result=result, resultBet=True)
+        if (newBet):
+            bet = WinnerBet(match=match, user=request.user, points=points, payout=pointsWin, winner=w, result=result, resultBet=True)
+        else:
+            oldbet.payout = float(oldbet.payout) + pointsWin
+            oldbet.points = float(oldbet.points) + points
     else:
-        bet = WinnerBet(match=match, user=request.user, points=points, payout=pointsWin, winner=winner, resultBet=False)
+        if (newBet):
+            bet = WinnerBet(match=match, user=request.user, points=points, payout=pointsWin, winner=winner, resultBet=False)
+        else:
+            oldbet.payout = float(oldbet.payout) + pointsWin
+            oldbet.points = float(oldbet.points) + points
 
-    bet.save()
+    if (newBet):
+        bet.save()
+    else:
+        oldbet.save()
+
     p.points = float(p.points) - points
     p.save()
     return JsonResponse({'good': True, 'msg': 'Veto rekisteröity.'})
@@ -183,12 +206,24 @@ def customBet(request):
         return JsonResponse({'good': False, 'msg': 'Veikkauskohdetta ei löytynyt.'})
     if match.canBet == False:
         return JsonResponse({'good': False, 'msg': 'Veikkauskohde on jo sulkeutunut.'})
+
+    newBet = False
+    try:
+        oldbet = CustomBet.objects.get(user=request.user, match=match, winner=winner)
+    except ObjectDoesNotExist:
+        newBet = True
+
     pointsWin = points * float(match.player1odds)
     if winner == 2: pointsWin = points * float(match.player2odds)
 
-    bet = CustomBet(match=match, user=request.user, points=points, payout=pointsWin, winner=winner)
+    if (newBet):
+        bet = CustomBet(match=match, user=request.user, points=points, payout=pointsWin, winner=winner)
+        bet.save()
+    else:
+        oldbet.payout = float(oldbet.payout) + pointsWin
+        oldbet.points = float(oldbet.points) + points
+        oldbet.save()
 
-    bet.save()
     p.points = float(p.points) - points
     p.save()
     return JsonResponse({'good': True, 'msg': 'Veto rekisteröity.'})
@@ -201,4 +236,5 @@ def resetUser(request):
     p.save()
 
     WinnerBet.objects.filter(user=request.user).delete()
+    CustomBet.objects.filter(user=request.user).delete()
     return JsonResponse({'good': True, 'msg': 'Pisteet ja vedot nollattu.'})
