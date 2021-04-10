@@ -108,57 +108,69 @@ class WinnerMatch(models.Model):
         old = WinnerMatch.objects.filter(pk=self.pk).first()
         if old:
             if old.winner!=self.winner:
-                winners = {}
-                for bet in WinnerBet.objects.filter(match=self.pk).filter(resolved=False):
-                    bet.resolved = True
-                    won = False
-                    if not bet.resultBet and bet.winner == self.winner: won=True
-                    elif bet.resultBet:
-                        if self.bestof == 3:
-                            if bet.result == 0 and self.p1maps==2 and self.p2maps==0: won=True
-                            elif bet.result == 1 and self.p1maps==2 and self.p2maps==1: won=True
-                            elif bet.result == 2 and self.p1maps==1 and self.p2maps==2: won=True
-                            elif bet.result == 3 and self.p1maps==0 and self.p2maps==2: won=True
-                        elif self.bestof == 5:
-                            if bet.result == 0 and self.p1maps==3 and self.p2maps==0: won=True
-                            elif bet.result == 1 and self.p1maps==3 and self.p2maps==1: won=True
-                            elif bet.result == 2 and self.p1maps==3 and self.p2maps==2: won=True
-                            elif bet.result == 3 and self.p1maps==2 and self.p2maps==3: won=True
-                            elif bet.result == 4 and self.p1maps==1 and self.p2maps==3: won=True
-                            elif bet.result == 5 and self.p1maps==0 and self.p2maps==3: won=True
-                        elif self.bestof == 7:
-                            if bet.result == 0 and self.p1maps==4 and self.p2maps==0: won=True
-                            elif bet.result == 1 and self.p1maps==4 and self.p2maps==1: won=True
-                            elif bet.result == 2 and self.p1maps==4 and self.p2maps==2: won=True
-                            elif bet.result == 3 and self.p1maps==4 and self.p2maps==3: won=True
-                            elif bet.result == 4 and self.p1maps==3 and self.p2maps==4: won=True
-                            elif bet.result == 5 and self.p1maps==2 and self.p2maps==4: won=True
-                            elif bet.result == 6 and self.p1maps==1 and self.p2maps==4: won=True
-                            elif bet.result == 7 and self.p1maps==0 and self.p2maps==4: won=True
-                    if won:
-                        p = Points.objects.get(user=bet.user)
-                        p.points += bet.payout
-                        winners[p.user.username] = winners.get(p.user.username, 0) + float(bet.payout);
-                        p.save()
-                        bet.won = True
+                if self.winner == 0 and old.winner != 0:
+                    #undo abort !!!
+                    for bet in WinnerBet.objects.filter(match=self.pk).filter(resolved=True):
+                        if bet.won == True:
+                            p = Points.objects.get(user=bet.user)
+                            p.points -= bet.payout
+                            p.save()
+                            bet.won = False
+                        bet.resolved = False
+                        bet.save()
 
-                    bet.save()
+                else:
+                    winners = {}
+                    for bet in WinnerBet.objects.filter(match=self.pk).filter(resolved=False):
+                        bet.resolved = True
+                        won = False
+                        if not bet.resultBet and bet.winner == self.winner: won=True
+                        elif bet.resultBet:
+                            if self.bestof == 3:
+                                if bet.result == 0 and self.p1maps==2 and self.p2maps==0: won=True
+                                elif bet.result == 1 and self.p1maps==2 and self.p2maps==1: won=True
+                                elif bet.result == 2 and self.p1maps==1 and self.p2maps==2: won=True
+                                elif bet.result == 3 and self.p1maps==0 and self.p2maps==2: won=True
+                            elif self.bestof == 5:
+                                if bet.result == 0 and self.p1maps==3 and self.p2maps==0: won=True
+                                elif bet.result == 1 and self.p1maps==3 and self.p2maps==1: won=True
+                                elif bet.result == 2 and self.p1maps==3 and self.p2maps==2: won=True
+                                elif bet.result == 3 and self.p1maps==2 and self.p2maps==3: won=True
+                                elif bet.result == 4 and self.p1maps==1 and self.p2maps==3: won=True
+                                elif bet.result == 5 and self.p1maps==0 and self.p2maps==3: won=True
+                            elif self.bestof == 7:
+                                if bet.result == 0 and self.p1maps==4 and self.p2maps==0: won=True
+                                elif bet.result == 1 and self.p1maps==4 and self.p2maps==1: won=True
+                                elif bet.result == 2 and self.p1maps==4 and self.p2maps==2: won=True
+                                elif bet.result == 3 and self.p1maps==4 and self.p2maps==3: won=True
+                                elif bet.result == 4 and self.p1maps==3 and self.p2maps==4: won=True
+                                elif bet.result == 5 and self.p1maps==2 and self.p2maps==4: won=True
+                                elif bet.result == 6 and self.p1maps==1 and self.p2maps==4: won=True
+                                elif bet.result == 7 and self.p1maps==0 and self.p2maps==4: won=True
+                        if won:
+                            p = Points.objects.get(user=bet.user)
+                            p.points += bet.payout
+                            winners[p.user.username] = winners.get(p.user.username, 0) + float(bet.payout);
+                            p.save()
+                            bet.won = True
 
-                self.canBet = False
+                        bet.save()
 
-                if len(winners) > 0:
-                    biggestwinners = "{} - {} vs {}<br />".format(self.title, self.player1, self.player2)
-                    winnerssorted = sorted(winners.items(), key=lambda x: x[1], reverse=True)
-                    index = 0
-                    for i in winnerssorted:
-                        biggestwinners = "{}{} +{}<br />".format(biggestwinners,i[0],i[1])
-                        index += 1
-                        # Print at most 10 topwinners
-                        if index > 10:
-                            break
-                    miscdata = MiscData.objects.get_or_create(name="bigwins")[0]
-                    miscdata.data = biggestwinners
-                    miscdata.save()
+                    self.canBet = False
+
+                    if len(winners) > 0:
+                        biggestwinners = "{} - {} vs {}<br />".format(self.title, self.player1, self.player2)
+                        winnerssorted = sorted(winners.items(), key=lambda x: x[1], reverse=True)
+                        index = 0
+                        for i in winnerssorted:
+                            biggestwinners = "{}{} +{}<br />".format(biggestwinners,i[0],i[1])
+                            index += 1
+                            # Print at most 10 topwinners
+                            if index > 10:
+                                break
+                        miscdata = MiscData.objects.get_or_create(name="bigwins")[0]
+                        miscdata.data = biggestwinners
+                        miscdata.save()
 
         #prooooobably want to check that winchance is 1-99.
         #But surely admins know what they are doing!
