@@ -93,6 +93,7 @@ class WinnerMatch(models.Model):
     resL3 = models.DecimalField(default=2,max_digits=11, decimal_places=2)
     p1maps = models.IntegerField(choices=[(0,0),(1,1),(2,2),(3,3),(4,4)], default=0, verbose_name='Map wins: Player 1 (if Bo3+)')
     p2maps = models.IntegerField(choices=[(0,0),(1,1),(2,2),(3,3),(4,4)], default=0, verbose_name='Map wins: Player 2 (if Bo3+)')
+    refund = models.BooleanField(default=False, verbose_name='REFUND ALL BETS!')
 
     def __str__(self):
         betopen = 'Closed'
@@ -107,7 +108,15 @@ class WinnerMatch(models.Model):
     def save(self,*args,**kwargs):
         old = WinnerMatch.objects.filter(pk=self.pk).first()
         if old:
-            if old.winner!=self.winner:
+            if self.refund:
+                self.canBet = False
+                for bet in WinnerBet.objects.filter(match=self.pk):
+                    p = Points.objects.get(user=bet.user)
+                    p.points += bet.points
+                    p.save()
+                    bet.delete()
+
+            elif old.winner!=self.winner:
                 if self.winner == 0 and old.winner != 0:
                     #undo abort !!!
                     for bet in WinnerBet.objects.filter(match=self.pk).filter(resolved=True):
